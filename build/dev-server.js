@@ -1,56 +1,57 @@
 import path from 'path'
+import chalk from 'chalk'
+import { spawn } from 'child_process'
 import electron from 'electron'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from './webpack.config'
+import { port, source } from '../config/dev.config'
 
+let electronProcess = null
+let manualRestart = false
+let hotMiddleware
 
 function startRenderer() {
   return new Promise((resolve, reject) => {
-    webpackConfig.devtool = 'source-map'
 
     // 热加载
-    const hotclient = [
-      'webpack-hot-middleware/client?noInfo=true&reload=true',
-      // "css-hot-loader?fileMap='../css/{fileName}"
-    ]
+    const hotClient = path.join(__dirname, './dev-client')
     if (typeof webpackConfig.entry == 'object') {
       Object.keys(webpackConfig.entry).forEach((name) => {
         const value = webpackConfig.entry[name]
         if (Array.isArray(value)) {
-          value.unshift(...hotclient)
+          value.unshift(hotClient)
         } else {
-          webpackConfig.entry[name] = [...hotclient, value]
+          webpackConfig.entry[name] = [hotClient, value]
         }
       })
     } else {
-      webpackConfig.entry = [...hotclient, webpackConfig.entry]
+      webpackConfig.entry = [hotClient, webpackConfig.entry]
     }
-
     const webpackCompiler = webpack(webpackConfig)
-
     const hotMiddleware = webpackHotMiddleware(webpackCompiler, {
-      log: false
+      log: false,
+      // heartbeat: 2500
     })
 
-
+    // 启用 dev-server
     const server = new WebpackDevServer(
       webpackCompiler,
       {
-        contentBase: path.join(__dirname, '../'),
-        quiet: true,
+        contentBase: source,
+        quiet: true, // 隐藏日志
         before(app, ctx) {
           app.use(hotMiddleware)
-          ctx.middleware.waitUntilValid(() => {
+          ctx.middleware.waitUntilValid((err) => {
+            console.log(`dev-server at ${chalk.magenta.underline(`http://localhost:${port}`)}`)
             resolve()
           })
-        }
+        },
       }
     )
-
-    server.listen(8060)
+    server.listen(port)
   })
 }
 
@@ -61,13 +62,14 @@ function startElectron() {
     electronLog(data, 'blue')
   })
   electronProcess.stderr.on('data', data => {
-    electronLog(data, 'red')
+    electronLog(data, 'yellow')
   })
 
   electronProcess.on('close', () => {
     if (!manualRestart) process.exit()
   })
 }
+
 
 function electronLog(data, color) {
   let log = ''
@@ -77,7 +79,7 @@ function electronLog(data, color) {
   })
   if (/[0-9A-z]+/.test(log)) {
     console.log(
-      chalk[color].bold('┏ Electron -------------------') +
+      chalk[color].bold('\n┏ Electron -------------------') +
       '\n\n' +
       log +
       chalk[color].bold('┗ ----------------------------') +
@@ -86,42 +88,4 @@ function electronLog(data, color) {
   }
 }
 
-function startMain() {
-  return new Promise((resolve, reject) => {
-    mainConfig.entry.main = [path.join(__dirname, '../src/main/index.dev.js')].concat(mainConfig.entry.main)
-
-    const compiler = webpack(mainConfig)
-
-    compiler.plugin('watch-run', (compilation, done) => {
-      logStats('Main', chalk.white.bold('compiling...'))
-      hotMiddleware.publish({ action: 'compiling' })
-      done()
-    })
-
-    compiler.watch({}, (err, stats) => {
-      if (err) {
-        console.log(err)
-        return
-      }
-
-      logStats('Main', stats)
-
-      if (electronProcess && electronProcess.kill) {
-        manualRestart = true
-        process.kill(electronProcess.pid)
-        electronProcess = null
-        startElectron()
-
-        setTimeout(() => {
-          manualRestart = false
-        }, 5000)
-      }
-
-      resolve()
-    })
-  })
-}
-
-startRenderer().then(res => {
-  console.log(res)
-})
+startRenderer().then(startElectron)

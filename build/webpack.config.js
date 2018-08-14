@@ -33,6 +33,7 @@ const webpackConfig = {
     chunkFilename: 'js/[name]-[chunkhash:7].js',
   },
 
+  devtool: 'source-map',
 
   module: {
     rules: [
