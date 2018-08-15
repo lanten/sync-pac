@@ -31,7 +31,7 @@ function startRenderer() {
       webpackConfig.entry = [hotClient, webpackConfig.entry]
     }
     const webpackCompiler = webpack(webpackConfig)
-    const hotMiddleware = webpackHotMiddleware(webpackCompiler, {
+    hotMiddleware = webpackHotMiddleware(webpackCompiler, {
       log: false,
       // heartbeat: 2500
     })
