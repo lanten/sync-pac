@@ -5,7 +5,6 @@ const htmlWebpackPlugin = require('html-webpack-plugin')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 
 
 const { NODE_ENV } = process.env
@@ -28,9 +27,8 @@ const webpackConfig = {
   },
   output: {
     publicPath: '/',
-    path: path.join(__dirname, '../dist'),
-    filename: 'js/[name]-[hash:7].js',
-    chunkFilename: 'js/[name]-[chunkhash:7].js',
+    path: path.join(__dirname, '../dist/app'),
+    filename: 'js/[name].js',
   },
 
   devtool: 'source-map',
@@ -55,21 +53,21 @@ const webpackConfig = {
         loader: 'file-loader',
         query: {
           // limit: 10000,
-          name: 'assets/[name]-[hash:7].[ext]',
+          name: 'assets/[name].[ext]',
         }
       }
     ]
   },
 
   plugins: [
-    new ProgressBarPlugin(),
+    // new ProgressBarPlugin(),
     new htmlWebpackPlugin({
       template: `${appPath}/index.html`,
       filename: 'index.html',
     }),
     new MiniCssExtractPlugin({
-      filename: 'css/[name]-[hash:7].css',
-      chunkFilename: "css/[name]-[chunkhash:7].css"
+      filename: 'css/[name].css',
+      chunkFilename: "css/[name].css"
     }),
     new webpack.ProvidePlugin({
       $api: 'src/api',
@@ -77,12 +75,6 @@ const webpackConfig = {
       $config: 'config/app.config.js',
     })
   ],
-
-  optimization: {
-    splitChunks: {
-      name: "common",
-    }
-  },
 }
 
 if (NODE_ENV == 'development') {
@@ -102,9 +94,6 @@ if (NODE_ENV == 'development') {
       }
     })
   )
-  webpackConfig.optimization.minimizer = [
-    new OptimizeCSSAssetsPlugin()
-  ]
 }
 
 module.exports = webpackConfig

@@ -10,8 +10,8 @@ if (NODE_ENV === 'development') {
   winURL = `http://localhost:${port}`
 
   // react-developer-tools
-  require('electron-debug')({ showDevTools: true })
-  require('electron').app.on('ready', () => {
+  require('electron-debug')({ showDevTools: false })
+  app.on('ready', () => {
     let installExtension = require('electron-devtools-installer')
     installExtension.default(installExtension.REACT_DEVELOPER_TOOLS)
       .then(() => { })
@@ -50,5 +50,4 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
 

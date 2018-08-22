@@ -7,6 +7,7 @@ import WebpackDevServer from 'webpack-dev-server'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
 import webpackConfig from './webpack.config'
+import webpackConfigMain from './webpack.config.main'
 import { port, source } from '../config/dev.config'
 
 let electronProcess = null
@@ -33,7 +34,7 @@ function startRenderer() {
     const webpackCompiler = webpack(webpackConfig)
     hotMiddleware = webpackHotMiddleware(webpackCompiler, {
       log: false,
-      // heartbeat: 2500
+      heartbeat: 2500
     })
 
     // 启用 dev-server
@@ -55,14 +56,47 @@ function startRenderer() {
   })
 }
 
+function startMain() {
+  return new Promise((resolve, reject) => {
+
+    const compiler = webpack(webpackConfigMain)
+
+    compiler.plugin('watch-run', (compilation, done) => {
+      electronLog('compiling...', 'Main', 'yellow')
+      hotMiddleware.publish({ action: 'compiling' })
+      done()
+    })
+
+    compiler.watch({}, (err, stats) => {
+      if (err) {
+        console.log(err)
+        return
+      }
+
+      if (electronProcess && electronProcess.kill) {
+        manualRestart = true
+        process.kill(electronProcess.pid)
+        electronProcess = null
+        startElectron()
+
+        setTimeout(() => {
+          manualRestart = false
+        }, 5000)
+      }
+
+      resolve()
+    })
+  })
+}
+
 function startElectron() {
   electronProcess = spawn(electron, ['--inspect=5858', '.'])
 
   electronProcess.stdout.on('data', data => {
-    electronLog(data, 'blue')
+    electronLog(data, 'Electron', 'blue')
   })
   electronProcess.stderr.on('data', data => {
-    electronLog(data, 'yellow')
+    electronLog(data, 'Electron', 'yellow')
   })
 
   electronProcess.on('close', () => {
@@ -71,21 +105,14 @@ function startElectron() {
 }
 
 
-function electronLog(data, color) {
-  let log = ''
-  data = data.toString().split(/\r?\n/)
-  data.forEach(line => {
-    log += `  ${line}\n`
-  })
-  if (/[0-9A-z]+/.test(log)) {
-    console.log(
-      chalk[color].bold('\n┏ Electron -------------------') +
-      '\n\n' +
-      log +
-      chalk[color].bold('┗ ----------------------------') +
-      '\n'
-    )
-  }
+function electronLog(data, type, color = 'gray') {
+  console.log(chalk[color](`\n┏ ---------------------------- [${type}] `))
+  console.log(chalk[color](data))
+  console.log(chalk[color](`┗ ----------------------------`))
 }
 
-startRenderer().then(startElectron)
+Promise.all([startRenderer(), startMain()]).then(() => {
+  startElectron()
+}).catch(err => {
+  console.error(err)
+})
