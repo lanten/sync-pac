@@ -1,6 +1,5 @@
-const electron = require('electron')
-const { app, BrowserWindow } = electron
-const { port } = require('../config/dev.config')
+import { app, BrowserWindow } from 'electron'
+import { port } from '../config/dev.config'
 
 const { NODE_ENV } = process.env
 

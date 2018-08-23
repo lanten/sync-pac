@@ -2,7 +2,6 @@ const path = require('path')
 const webpack = require('webpack')
 
 const htmlWebpackPlugin = require('html-webpack-plugin')
-const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 

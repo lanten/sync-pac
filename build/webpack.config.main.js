@@ -26,8 +26,6 @@ const webpackConfig = {
     filename: '[name].js',
   },
 
-  devtool: 'source-map',
-
   module: {
     rules: [
       {

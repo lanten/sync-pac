@@ -2,7 +2,7 @@
   "name": "sync-files",
   "version": "1.0.0",
   "description": "",
-  "main": "electron/main.js",
+  "main": "dist/electron/main.js",
   "scripts": {
     "test": "electron electron .",
     "dev": "cross-env NODE_ENV=development babel-node build/dev-server.js"
