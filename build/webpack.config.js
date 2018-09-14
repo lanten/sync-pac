@@ -11,7 +11,7 @@ const { NODE_ENV } = process.env
 const projectPath = process.cwd()
 const appPath = path.join(__dirname, `../src`)
 
-const styleLoader = `css-hot-loader!${NODE_ENV == 'development' ? 'style-loader' : MiniCssExtractPlugin.loader}!css-loader${NODE_ENV == 'production' ? '!postcss-loader' : ''}`
+const styleLoader = `css-hot-loader!${NODE_ENV === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader}!css-loader${NODE_ENV === 'production' ? '!postcss-loader' : ''}`
 
 console.log(NODE_ENV, appPath)
 
@@ -25,8 +25,8 @@ const webpackConfig = {
     modules: [projectPath, 'node_modules']
   },
   output: {
-    publicPath: '/',
-    path: path.join(__dirname, '../dist/app'),
+    publicPath: './',
+    path: path.join(__dirname, `../dist`),
     filename: 'js/[name].js',
   },
 
@@ -76,13 +76,13 @@ const webpackConfig = {
   ],
 }
 
-if (NODE_ENV == 'development') {
+if (NODE_ENV === 'development') {
   // 开花环境配置
   webpackConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
   )
-} else if (NODE_ENV == 'production') {
+} else if (NODE_ENV === 'production') {
   // 生产环境配置
   webpackConfig.plugins.push(
     new UglifyJsPlugin({

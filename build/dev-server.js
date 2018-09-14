@@ -1,14 +1,16 @@
 import path from 'path'
 import chalk from 'chalk'
 import { spawn } from 'child_process'
+import chokidar from 'chokidar'
 import electron from 'electron'
 import webpack from 'webpack'
 import WebpackDevServer from 'webpack-dev-server'
 import webpackHotMiddleware from 'webpack-hot-middleware'
 
-import webpackConfig from './webpack.config'
-import webpackConfigMain from './webpack.config.main'
 import { port, source } from '../config/dev.config'
+
+process.env.NODE_ENV = 'development'
+const webpackConfig = require('./webpack.config')
 
 let electronProcess = null
 let manualRestart = false
@@ -17,20 +19,22 @@ let hotMiddleware
 function startRenderer() {
   return new Promise((resolve, reject) => {
 
-    // 热加载
-    const hotClient = path.join(__dirname, './dev-client')
+    webpackConfig.devtool = 'source-map'
+    const hotclient = ['webpack-hot-middleware/client?noInfo=true&reload=true']
+
     if (typeof webpackConfig.entry == 'object') {
       Object.keys(webpackConfig.entry).forEach((name) => {
         const value = webpackConfig.entry[name]
         if (Array.isArray(value)) {
-          value.unshift(hotClient)
+          value.unshift(...hotclient)
         } else {
-          webpackConfig.entry[name] = [hotClient, value]
+          webpackConfig.entry[name] = [...hotclient, value]
         }
       })
     } else {
-      webpackConfig.entry = [hotClient, webpackConfig.entry]
+      webpackConfig.entry = [...hotclient, webpackConfig.entry]
     }
+
     const webpackCompiler = webpack(webpackConfig)
     hotMiddleware = webpackHotMiddleware(webpackCompiler, {
       log: false,
@@ -56,41 +60,8 @@ function startRenderer() {
   })
 }
 
-function startMain() {
-  return new Promise((resolve, reject) => {
-
-    const compiler = webpack(webpackConfigMain)
-
-    compiler.plugin('watch-run', (compilation, done) => {
-      electronLog('compiling...', 'Main', 'yellow')
-      hotMiddleware.publish({ action: 'compiling' })
-      done()
-    })
-
-    compiler.watch({}, (err, stats) => {
-      if (err) {
-        console.log(err)
-        return
-      }
-
-      if (electronProcess && electronProcess.kill) {
-        manualRestart = true
-        process.kill(electronProcess.pid)
-        electronProcess = null
-        startElectron()
-
-        setTimeout(() => {
-          manualRestart = false
-        }, 5000)
-      }
-
-      resolve()
-    })
-  })
-}
-
 function startElectron() {
-  electronProcess = spawn(electron, ['--inspect=5858', '.'])
+  electronProcess = spawn(electron, ['.'])
 
   electronProcess.stdout.on('data', data => {
     electronLog(data, 'Electron', 'blue')
@@ -111,8 +82,26 @@ function electronLog(data, type, color = 'gray') {
   console.log(chalk[color](`┗ ----------------------------`))
 }
 
-Promise.all([startRenderer(), startMain()]).then(() => {
+startRenderer().then(() => {
   startElectron()
 }).catch(err => {
   console.error(err)
+})
+
+const watcher = chokidar.watch(path.join(__dirname, '../electron'), {
+  ignored: /(^|[\/\\])\../,
+  persistent: true
+})
+
+watcher.on('all', (path) => {
+  if (electronProcess && electronProcess.kill) {
+    manualRestart = true
+    process.kill(electronProcess.pid)
+    electronProcess = null
+    startElectron()
+
+    setTimeout(() => {
+      manualRestart = false
+    }, 5000)
+  }
 })

@@ -1,9 +1,12 @@
-import { app, BrowserWindow } from 'electron'
-import { port } from '../config/dev.config'
+const path = require('path')
+const { app, BrowserWindow } = require('electron')
+const { port } = require('../config/dev.config')
 
 const { NODE_ENV } = process.env
 
 let mainWindow, winURL
+
+console.log(123)
 
 if (NODE_ENV === 'development') {
   winURL = `http://localhost:${port}`
@@ -12,14 +15,14 @@ if (NODE_ENV === 'development') {
   require('electron-debug')({ showDevTools: false })
   app.on('ready', () => {
     let installExtension = require('electron-devtools-installer')
-    installExtension.default(installExtension.REACT_DEVELOPER_TOOLS)
-      .then(() => { })
-      .catch(err => {
-        console.log('Unable to install `react-developer-tools`: \n', err)
-      })
+    installExtension.default(installExtension.REACT_DEVELOPER_TOOLS).then(() => {
+
+    }).catch(err => {
+      console.log('Unable to install `react-developer-tools`: \n', err)
+    })
   })
 } else {
-  winURL = `file://${__dirname}/index.html`
+  winURL = `file://${path.join(__dirname, '../dist/index.html')}`
 }
 
 
@@ -29,7 +32,7 @@ function createWindow() {
   mainWindow.loadURL(winURL)
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
     mainWindow = null
