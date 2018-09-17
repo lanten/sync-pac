@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 
+const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
@@ -11,7 +12,7 @@ const { NODE_ENV } = process.env
 const projectPath = process.cwd()
 const appPath = path.join(__dirname, `../src`)
 
-const styleLoader = `css-hot-loader!${NODE_ENV === 'development' ? 'style-loader' : MiniCssExtractPlugin.loader}!css-loader${NODE_ENV === 'production' ? '!postcss-loader' : ''}`
+const styleLoader = `${NODE_ENV === 'development' ? 'css-hot-loader!style-loader' : MiniCssExtractPlugin.loader}!css-loader`
 
 console.log(NODE_ENV, appPath)
 
@@ -37,11 +38,11 @@ const webpackConfig = {
       {
         test: /\.js[x]?$/,
         include: appPath,
-        loader: ['babel-loader']
+        loader: ['babel-loader'],
       },
       {
         test: /\.(less)$/,
-        loader: `${styleLoader}!less-loader`,
+        loader: `${styleLoader}!less-loader?javascriptEnabled=true`,
       },
       {
         test: /\.css$/,
@@ -59,7 +60,7 @@ const webpackConfig = {
   },
 
   plugins: [
-    // new ProgressBarPlugin(),
+    new ProgressBarPlugin(),
     new htmlWebpackPlugin({
       template: `${appPath}/index.html`,
       filename: 'index.html',
@@ -72,12 +73,12 @@ const webpackConfig = {
       $api: 'src/api',
       $app: 'src/utils/app.js',
       $config: 'config/app.config.js',
-    })
+    }),
   ],
 }
 
 if (NODE_ENV === 'development') {
-  // 开花环境配置
+  // 开发环境配置
   webpackConfig.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

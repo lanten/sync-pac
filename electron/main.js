@@ -6,8 +6,6 @@ const { NODE_ENV } = process.env
 
 let mainWindow, winURL
 
-console.log(123)
-
 if (NODE_ENV === 'development') {
   winURL = `http://localhost:${port}`
 
@@ -32,7 +30,7 @@ function createWindow() {
   mainWindow.loadURL(winURL)
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools()
+  // mainWindow.webContents.openDevTools()
 
   mainWindow.on('closed', function () {
     mainWindow = null
