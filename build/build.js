@@ -19,13 +19,13 @@ buildCommon(webpackConfig).then(() => {
 })
 
 
-// function bundleApp() {
-//   packageConfig.mode = 'production'
-//   packager(packageConfig, (err, appPaths) => {
-//     if (err) {
-//       console.error(err)
-//     } else {
-//       console.log('打包完成!')
-//     }
-//   })
-// }
+function bundleApp() {
+  packageConfig.mode = 'production'
+  packager(packageConfig, (err, appPaths) => {
+    if (err) {
+      console.error(err)
+    } else {
+      console.log('打包完成!')
+    }
+  })
+}

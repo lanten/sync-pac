@@ -1,24 +1,26 @@
 {
-  "name": "sync-files",
+  "name": "sync-file",
   "version": "1.0.0",
   "description": "",
   "main": "electron/main.js",
   "scripts": {
-    "test": "electron electron .",
+    "start": "npm run dev",
     "dev": "babel-node build/dev-server.js",
-    "build": "babel-node build/build.js",
-    "build:mac": "cross-env BUILD_TARGET=mas babel-node build/build.js"
+    "pack": "babel-node build/build.js",
+    "pack:mac": "cross-env BUILD_TARGET=mas babel-node build/build.js",
+    "pack:win": "cross-env BUILD_TARGET=win32 babel-node build/build.js",
+    "pack:linux": "cross-env BUILD_TARGET=linux babel-node build/build.js",
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lanten/sync-files.git"
+    "url": "git+https://github.com/lanten/sync-file.git"
   },
   "author": "lanten",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lanten/sync-files/issues"
+    "url": "https://github.com/lanten/sync-file/issues"
   },
-  "homepage": "https://github.com/lanten/sync-files#readme",
+  "homepage": "https://github.com/lanten/sync-file#readme",
   "dependencies": {
     "@reach/router": "^1.1.1",
     "antd": "^3.8.0",
@@ -50,6 +52,7 @@
     "less": "^3.8.1",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "^0.4.1",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
     "progress-bar-webpack-plugin": "^1.11.0",
     "style-loader": "^0.23.0",
     "uglifyjs-webpack-plugin": "^1.2.7",

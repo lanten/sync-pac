@@ -1,8 +1,8 @@
 import React from 'react'
-import Page1 from '../pages/page-1'
+import AsyncImport from '../utils/AsyncImport'
 
 const routes = [
-  { path: '/', component: Page1 },
+  { path: '/', component: AsyncImport(() => import('../pages/page-1')) },
 
   {
     path: '/page1', component: props => props.children, children: [

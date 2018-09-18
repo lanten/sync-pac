@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const ProgressBarPlugin = require('progress-bar-webpack-plugin')
 const htmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 
@@ -29,6 +30,7 @@ const webpackConfig = {
     publicPath: './',
     path: path.join(__dirname, `../dist`),
     filename: 'js/[name].js',
+    chunkFilename: "js/[name].js",
   },
 
   devtool: 'source-map',
@@ -57,6 +59,12 @@ const webpackConfig = {
         }
       }
     ]
+  },
+
+  optimization: {
+    splitChunks: {
+      name: "common",
+    }
   },
 
   plugins: [
@@ -92,8 +100,13 @@ if (NODE_ENV === 'development') {
           pure_funcs: ['console.log'], // 删除console.log, 保留 info ，warn，error 等
         },
       }
+    }),
+    new OptimizeCSSAssetsPlugin({
+      // cssProcessorOptions: { discardComments: { removeAll: true } },
+      // canPrint: true
     })
   )
+
 }
 
 module.exports = webpackConfig
