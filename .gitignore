@@ -1,3 +1,4 @@
 node_modules/
 dis/
 prod/
+yarn-error.log
