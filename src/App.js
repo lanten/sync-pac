@@ -1,5 +1,6 @@
 import React from 'react'
-import Router from './Router'
+import Router from './components/Router'
+import routes from './routes'
 
 export default class App extends React.Component {
   constructor(props) {
@@ -10,8 +11,8 @@ export default class App extends React.Component {
     return (
       <div>
         App is ok
-        <hr/>
-        <Router />
+        <hr />
+        <Router routes={routes} />
       </div>
     )
   }
