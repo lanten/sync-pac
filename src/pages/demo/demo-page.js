@@ -8,12 +8,14 @@ export default class Page extends React.Component {
   }
 
   render() {
+    const { params: { config }, history } = this.props
     return (
       <div>
-        <p>Page is ok</p>
+        <p>demo - {config}</p>
         <hr />
-
-        <Button>123</Button>
+        <Button onClick={() => {
+          history.goBack()
+        }}>back</Button>
       </div>
     )
   }

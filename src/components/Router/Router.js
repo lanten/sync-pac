@@ -2,6 +2,7 @@ import React from "react"
 import {
   HashRouter as Router,
   Route,
+  Switch,
 } from "react-router-dom";
 
 export default class AppRouter extends React.Component {
@@ -17,18 +18,22 @@ export default class AppRouter extends React.Component {
     const { routes } = this.props
     return (
       <Router>
-        <React.Fragment>
+        <Switch>
           {routes.map(this.creatRoute)}
-        </React.Fragment>
+        </Switch>
       </Router>
     )
   }
 
   creatRoute = (routeConfig, i) => {
-    const { key = i, path, component: Comp, params } = routeConfig
-
+    const { key = i, path, exact, component: Comp, params } = routeConfig
     return (
-      <Route key={key} path={path} component={props => <Comp {...props} params={params} />} />
+      <Route
+        key={key}
+        exact={exact}
+        path={path}
+        render={props => <Comp {...props} params={params} />}
+      />
     )
   }
 

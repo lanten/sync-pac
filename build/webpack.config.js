@@ -17,7 +17,7 @@ const styleLoader = [{ loader: 'css-loader' }]
 if (NODE_ENV === 'development') {
   styleLoader.unshift({ loader: 'css-hot-loader' }, { loader: 'style-loader' })
 } else {
-  styleLoader.unshift({ loader: MiniCssExtractPlugin.loader }, { loader: 'style-loader' })
+  styleLoader.unshift({ loader: MiniCssExtractPlugin.loader })
 }
 
 console.log(NODE_ENV, appPath)
@@ -90,10 +90,6 @@ const webpackConfig = {
       template: `${appPath}/index.html`,
       filename: 'index.html',
     }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].css',
-      chunkFilename: "css/[name].css"
-    }),
     new webpack.ProvidePlugin({
       $api: 'src/api',
       $app: 'src/utils/app.js',
@@ -117,6 +113,10 @@ if (NODE_ENV === 'development') {
           pure_funcs: ['console.log'], // 删除console.log, 保留 info ，warn，error 等
         },
       }
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].css',
+      chunkFilename: "css/[name].css"
     }),
     new OptimizeCSSAssetsPlugin({
       // cssProcessorOptions: { discardComments: { removeAll: true } },
