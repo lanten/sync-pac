@@ -1,3 +1,11 @@
+> 完成度 0.1%
+## 这是什么玩意儿？
+基于 electron 实现的 shadowsocks 用户PAC规则管理工具
+
+## 平台支持
+- windows 7
+- mac os 10.8
+
 ## Quick start
 ```bash
 npm start

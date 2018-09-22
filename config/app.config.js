@@ -2,6 +2,6 @@
 const path = require('path')
 
 module.exports = {
-  appName: 'sync-file',
+  appName: 'sync-pac',
   appIcon: path.join(__dirname, '../assets/app-icon/app-icon@64.png')
 }
