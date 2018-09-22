@@ -12,13 +12,13 @@ export default class Home extends React.Component {
         <Button onClick={() => {
           this.props.history.push('/demo')
         }}>demo home</Button>
-        <br/>
+        <br />
         <Button onClick={() => {
           this.props.history.push('/demo/1')
         }}>demo 1</Button>
-        <br/>
+        <br />
         <Button onClick={() => {
-          this.props.history.push('/demo/2')
+          // this.props.history.push('/demo/2')
         }}>demo 2</Button>
       </div>
     )

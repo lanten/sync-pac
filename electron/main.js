@@ -1,6 +1,7 @@
 const path = require('path')
 const { app, BrowserWindow } = require('electron')
 const { port } = require('../config/dev.config')
+const { creatTray } = require('./tray')
 
 const { NODE_ENV } = process.env
 
@@ -37,7 +38,10 @@ function createWindow() {
   })
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+  createWindow()
+  creatTray()
+})
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
