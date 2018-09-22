@@ -1,6 +1,7 @@
 const path = require('path')
 const { app, BrowserWindow } = require('electron')
 const { port } = require('../config/dev.config')
+const { appIcon } = require('../config/app.config')
 const { creatTray } = require('./tray')
 
 const { NODE_ENV } = process.env
@@ -26,7 +27,7 @@ if (NODE_ENV === 'development') {
 
 
 function createWindow() {
-  mainWindow = new BrowserWindow({ width: 800, height: 600 })
+  mainWindow = new BrowserWindow({ icon: appIcon, width: 800, height: 600 })
 
   mainWindow.loadURL(winURL)
 
