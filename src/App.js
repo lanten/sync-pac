@@ -1,6 +1,7 @@
 import React from 'react'
 import { Router } from './components'
 import routes from './pages/routes'
+// import { ipcRenderer, remote } from 'electron';
 import './styles/index.less'
 
 export default class App extends React.Component {
@@ -19,3 +20,14 @@ export default class App extends React.Component {
   }
 
 } // class App end
+
+// global.ipcFunction = {
+//   router(val) {
+//     location.hash = `#${val}`
+//   }
+// }
+
+
+// ipcRenderer.on('common', (e, data) => {
+//   const { }
+// })

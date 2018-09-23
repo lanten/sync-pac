@@ -19,6 +19,7 @@ export default class Home extends React.Component {
         <br />
         <Button onClick={() => {
           // this.props.history.push('/demo/2')
+          console.log(process.argv, process)
         }}>demo 2</Button>
       </div>
     )

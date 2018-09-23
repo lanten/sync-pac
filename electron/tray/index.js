@@ -2,19 +2,19 @@ const path = require('path')
 const { Menu, Tray } = require('electron')
 const { appName, appIcon } = require('../../config/app.config')
 
-const defaultMenus = require('./menus')
+const defaultMenus = require('../menus/tray-menus')
 
-let tray = null
 
 function creatTray({ menus = defaultMenus, title = appName, icon } = {}) {
-  tray = new Tray(appIcon)
+  let tray = new Tray(appIcon)
   tray.setToolTip(title)
   tray.setContextMenu(Menu.buildFromTemplate(menus))
   tray.on('double-click', () => {
     console.log(12333)
   })
+  return tray
 }
 
 module.exports = {
-  tray, creatTray
+  creatTray
 }

@@ -1,15 +1,13 @@
 const path = require('path')
 const { app, BrowserWindow } = require('electron')
-const { port } = require('../config/dev.config')
-const { appIcon } = require('../config/app.config')
 const { creatTray } = require('./tray')
+const { createWindow } = require('./window')
 
 const { NODE_ENV } = process.env
 
-let mainWindow, winURL
+let tray
 
 if (NODE_ENV === 'development') {
-  winURL = `http://localhost:${port}`
 
   // react-developer-tools
   require('electron-debug')({ showDevTools: false })
@@ -21,38 +19,27 @@ if (NODE_ENV === 'development') {
       console.log('Unable to install `react-developer-tools`: \n', err)
     })
   })
-} else {
-  winURL = `file://${path.join(__dirname, '../dist/index.html')}`
 }
 
-
-function createWindow() {
-  mainWindow = new BrowserWindow({ icon: appIcon, width: 800, height: 600 })
-
-  mainWindow.loadURL(winURL)
-
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
-
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
-}
 
 app.on('ready', () => {
-  createWindow()
-  creatTray()
+  tray = creatTray()
 })
 
-app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit()
-  }
+app.on('window-all-closed', e => {
+  // if (process.platform !== 'darwin') {
+  //   app.quit()
+  // }
+  // console.log(e)
 })
 
-app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindow()
-  }
+app.on('before-quit', e => {
+  tray.destroy()
 })
+
+// app.on('activate', function () {
+//   if (mainWindow === null) {
+//     createWindow()
+//   }
+// })
 

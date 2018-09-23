@@ -10,7 +10,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import { port, source } from '../config/dev.config'
 
 process.env.NODE_ENV = 'development'
-const webpackConfig = require('./webpack.config')
+const webpackConfig = require('../config/webpack.config')
 
 let electronProcess = null
 let manualRestart = false
@@ -67,10 +67,10 @@ function startElectron() {
   electronProcess = spawn(electron, ['.'])
 
   electronProcess.stdout.on('data', data => {
-    electronLog(data, 'Electron', 'blue')
+    electronLog(data, 'Electron', 'yellow')
   })
   electronProcess.stderr.on('data', data => {
-    electronLog(data, 'Electron', 'yellow')
+    electronLog(data, 'Electron', 'red')
   })
 
   electronProcess.on('close', () => {
