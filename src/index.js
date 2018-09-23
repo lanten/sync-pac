@@ -1,13 +1,14 @@
 import React from 'react'
 import reactDom from 'react-dom'
-import { remote } from 'electron';
+import { ipcRenderer } from 'electron'
 
 import App from './App'
 
 
 reactDom.render(<App />, document.getElementById('root'))
 
+// const route = remote.getGlobal('hashRoute')
 
-// const route = remote.getGlobal('route')
-
-// console.log(route)
+ipcRenderer.on('router', (e, val) => {
+  location.hash = val
+})

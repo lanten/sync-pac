@@ -6,7 +6,7 @@ const path = require('path')
  */
 module.exports = {
   arch: 'x64',
-  asar: true,
+  asar: false,
   dir: path.join(__dirname, '../'),
   icon: path.join(__dirname, '../assets/app-icon/icon'),
   ignore: /(^\/(src|test|build|\.[a-z]+|README|yarn|static))|\.gitkeep/,

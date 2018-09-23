@@ -24,6 +24,7 @@ if (NODE_ENV === 'development') {
 
 app.on('ready', () => {
   tray = creatTray()
+  createWindow('pac')
 })
 
 app.on('window-all-closed', e => {
@@ -36,6 +37,7 @@ app.on('window-all-closed', e => {
 app.on('before-quit', e => {
   tray.destroy()
 })
+
 
 // app.on('activate', function () {
 //   if (mainWindow === null) {

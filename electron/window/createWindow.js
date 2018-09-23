@@ -7,16 +7,18 @@ const urls = require('./window-urls')
 
 const { NODE_ENV } = process.env
 
+const windowList = {}
+
 /**
  * 
  * @param {String} urlKey 
  */
-function getWindowUrl() {
-  let winURL
+function getWindowUrl(key) {
+  let winURL, hash = urls[key]
   if (NODE_ENV === 'development') {
-    winURL = `http://localhost:${port}`
+    winURL = `http://localhost:${port}#${hash}`
   } else {
-    winURL = `file://${path.join(__dirname, '../dist/index.html')}`
+    winURL = `file://${path.join(__dirname, '../../dist/index.html')}#${hash}`
   }
   return winURL
 }
@@ -27,8 +29,11 @@ function getWindowUrl() {
  * @param {Object} BrowserWindowOptions 
  */
 function createWindow(key, options = {}) {
-  let url = urls[key]
-  global.hashRoute = url
+  let win = windowList[key]
+  if (windowList[key]) {
+    win.show()
+    return win
+  }
   const defaultOptions = {
     icon: appIcon,
     width: 800,
@@ -39,13 +44,18 @@ function createWindow(key, options = {}) {
     // backgroundColor: '#fff',
     // transparent: true, // 窗口是否透明
   }
-  let win = new BrowserWindow(Object.assign(defaultOptions, options))
+  win = new BrowserWindow(Object.assign(defaultOptions, options))
   // console.log(win.webContents.location)
-
-  win.loadURL(getWindowUrl())
+  windowList[key] = win
+  win.loadURL(getWindowUrl(key))
   win.once('ready-to-show', () => {
     win.show()
     win.webContents.openDevTools()
+    console.log(win.webContents)
+  })
+
+  win.on('closed', () => {
+    delete windowList[key]
   })
 
   return win
@@ -55,4 +65,5 @@ function createWindow(key, options = {}) {
 module.exports = {
   createWindow,
   getWindowUrl,
+  windowList,
 }
