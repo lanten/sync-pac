@@ -24,7 +24,7 @@ if (NODE_ENV === 'development') {
 
 app.on('ready', () => {
   tray = creatTray()
-  createWindow('pac')
+  createWindow('home')
 })
 
 app.on('window-all-closed', e => {

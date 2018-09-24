@@ -40,6 +40,7 @@ function createWindow(key, options = {}) {
     height: 600,
     // frame: false, // 无边框窗口
     show: false,
+    shadow: true,
     skipTaskbar: false, // 是否在任务栏中隐藏窗口
     // backgroundColor: '#fff',
     // transparent: true, // 窗口是否透明
@@ -51,7 +52,6 @@ function createWindow(key, options = {}) {
   win.once('ready-to-show', () => {
     win.show()
     win.webContents.openDevTools()
-    console.log(win.webContents)
   })
 
   win.on('closed', () => {
