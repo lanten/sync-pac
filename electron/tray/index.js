@@ -1,5 +1,5 @@
 const path = require('path')
-const { Menu, Tray } = require('electron')
+const { Menu, Tray, systemPreferences } = require('electron')
 const { appName, appIcon } = require('../../config/app.config')
 
 const { createWindow } = require('../window')
@@ -13,6 +13,8 @@ function creatTray({ menus = defaultMenus, title = appName, icon } = {}) {
   tray.on('double-click', () => {
     createWindow('home')
   })
+  console.log(systemPreferences.isDarkMode())
+
   return tray
 }
 
