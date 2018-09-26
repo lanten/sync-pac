@@ -1,6 +1,6 @@
 const path = require('path')
 const { Menu, Tray } = require('electron')
-const { appName, appIcon } = require('../../config/app.config')
+const { appName, trayIconDark, trayIconLight } = require('../../config/app.config')
 
 const { createWindow } = require('../window')
 const defaultMenus = require('../menus/tray-menus')
