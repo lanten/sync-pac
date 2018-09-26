@@ -44,6 +44,7 @@ function createWindow(key, options = {}) {
     skipTaskbar: false, // 是否在任务栏中隐藏窗口
     // backgroundColor: '#fff',
     // transparent: true, // 窗口是否透明
+    vibrancy: 'light',
   }
   win = new BrowserWindow(Object.assign(defaultOptions, options))
   // console.log(win.webContents.location)
@@ -51,7 +52,7 @@ function createWindow(key, options = {}) {
   win.loadURL(getWindowUrl(key))
   win.once('ready-to-show', () => {
     win.show()
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   })
 
   win.on('closed', () => {
