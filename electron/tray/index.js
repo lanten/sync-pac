@@ -7,13 +7,13 @@ const defaultMenus = require('../menus/tray-menus')
 
 
 function creatTray({ menus = defaultMenus, title = appName, icon } = {}) {
-  let tray = new Tray(appIcon)
+  const iconPath = systemPreferences.isDarkMode() ? trayIconDark : trayIconLight
+  let tray = new Tray(iconPath)
   tray.setToolTip(title)
   tray.setContextMenu(Menu.buildFromTemplate(menus))
   tray.on('double-click', () => {
     createWindow('home')
   })
-  console.log(systemPreferences.isDarkMode())
 
   return tray
 }
