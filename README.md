@@ -1,6 +1,6 @@
-<center>
+<div align="center">
   <img src="./assets/app-icon/app-icon@256.png"/>
-</center>
+</div>
 
 > 完成度 0.1%
 ## 这是什么玩意儿？
