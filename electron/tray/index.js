@@ -1,16 +1,15 @@
 const path = require('path')
 const { Menu, Tray, systemPreferences, nativeImage } = require('electron')
-const { appName, trayIconWhite, trayIconBlack } = require('../../config/app.config')
+const { appName, trayIconDark, trayIconLight } = require('../../config/app.config')
 
 const { createWindow } = require('../window')
 const defaultMenus = require('../menus/tray-menus')
 
 
 function creatTray({ menus = defaultMenus, title = appName, icon } = {}) {
-  const iconPath = systemPreferences.isDarkMode() ? trayIconWhite : trayIconBlack
+  const iconPath = systemPreferences.isDarkMode() ? trayIconLight : trayIconDark
   let image = nativeImage.createFromPath(iconPath)
   image.setTemplateImage(true)
-  console.log(iconPath)
   let tray = new Tray(image)
   tray.setToolTip(title)
   tray.setContextMenu(Menu.buildFromTemplate(menus))
