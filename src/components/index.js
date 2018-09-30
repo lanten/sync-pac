@@ -1,7 +1,4 @@
-import AsyncImport from './AsyncImport'
-import Router from './Router'
-import Header from './Header'
-
-module.exports = {
-  AsyncImport, Router, Header
-}
+export { default as AsyncImport } from './AsyncImport'
+export { default as Router } from './Router'
+export { default as SiderMenu } from './SiderMenu'
+export { default as Header } from './Header'

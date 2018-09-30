@@ -40,11 +40,12 @@ function createWindow(key, options = {}) {
     height: 600,
     // frame: false, // 无边框窗口
     show: false,
-    shadow: true,
+    hasShadow: true,
     skipTaskbar: false, // 是否在任务栏中隐藏窗口
     // backgroundColor: '#fff',
     // transparent: true, // 窗口是否透明
-    vibrancy: 'light',
+    titleBarStyle: 'hidden',
+    vibrancy: 'appearance-based',
   }
   win = new BrowserWindow(Object.assign(defaultOptions, options))
   // console.log(win.webContents.location)

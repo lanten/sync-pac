@@ -14,7 +14,6 @@ if (NODE_ENV === 'development') {
   app.on('ready', () => {
     let installExtension = require('electron-devtools-installer')
     installExtension.default(installExtension.REACT_DEVELOPER_TOOLS).then(() => {
-
     }).catch(err => {
       console.log('Unable to install `react-developer-tools`: \n', err)
     })
@@ -28,20 +27,8 @@ app.on('ready', () => {
 })
 
 app.on('window-all-closed', e => {
-  // if (process.platform !== 'darwin') {
-  //   app.quit()
-  // }
-  // console.log(e)
 })
 
-app.on('before-quit', e => {
+app.on('quit', e => {
   tray.destroy()
 })
-
-
-// app.on('activate', function () {
-//   if (mainWindow === null) {
-//     createWindow()
-//   }
-// })
-

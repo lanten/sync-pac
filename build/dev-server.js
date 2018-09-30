@@ -67,10 +67,10 @@ function startElectron() {
   electronProcess = spawn(electron, ['.'])
 
   electronProcess.stdout.on('data', data => {
-    electronLog(data, 'Electron', 'yellow')
+    electronLog(data, 'Electron', 'cyan')
   })
   electronProcess.stderr.on('data', data => {
-    electronLog(data, 'Electron', 'red')
+    electronLog(data, 'Electron', 'yellow')
   })
 
   electronProcess.on('close', () => {

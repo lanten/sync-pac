@@ -1,0 +1,18 @@
+@import '../../styles/var.less';
+.sider-menu {
+  width: @width_sider;
+  background-color: transparent;
+  border-color: #ddd;
+  .ant-menu-submenu {
+    &>.ant-menu {
+      background-color: transparent;
+    }
+  }
+  .ant-menu-item {
+    background-color: transparent;
+    user-select: none;
+    &.ant-menu-item-selected {
+      background-color: fade(lighten(@color_main, 45), 45);
+    }
+  }
+}

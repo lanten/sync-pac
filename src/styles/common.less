@@ -1,17 +1,16 @@
+@import'../styles/var.less';
 html,
 body {
   background-color: transparent !important;
 }
 
-body {
-  // padding: 16px;
-}
-
 #root {
-  // background-color: #fff;
   border-radius: 6px;
   height: 100%;
-  // box-shadow: 0 0 8px #000;
+  .main-container {
+    padding: @p;
+    background-color: #fff;
+  }
 }
 
 .loopFontSize (@count)when(@count > 9) {
