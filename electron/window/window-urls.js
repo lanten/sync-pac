@@ -1,5 +1,6 @@
 const urls = {
-  home:'/'
+  home:'/',
+  pac:'/pac',
 }
 
 

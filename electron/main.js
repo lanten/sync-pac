@@ -27,6 +27,7 @@ app.on('ready', () => {
 })
 
 app.on('window-all-closed', e => {
+  e.preventDefault()
 })
 
 app.on('quit', e => {

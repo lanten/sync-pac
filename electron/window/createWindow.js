@@ -41,10 +41,10 @@ function createWindow(key, options = {}) {
     // frame: false, // 无边框窗口
     show: false,
     hasShadow: true,
-    skipTaskbar: false, // 是否在任务栏中隐藏窗口
+    // skipTaskbar: false, // 是否在任务栏中隐藏窗口
     // backgroundColor: '#fff',
     // transparent: true, // 窗口是否透明
-    titleBarStyle: 'hidden',
+    // titleBarStyle: 'hidden',
     vibrancy: 'appearance-based',
   }
   win = new BrowserWindow(Object.assign(defaultOptions, options))
@@ -56,7 +56,10 @@ function createWindow(key, options = {}) {
     // win.webContents.openDevTools()
   })
 
-  win.on('closed', () => {
+  // win.on('close', e => {
+  // })
+
+  win.on('closed', e => {
     delete windowList[key]
   })
 
