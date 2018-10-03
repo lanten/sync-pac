@@ -56,9 +56,6 @@ function createWindow(key, options = {}) {
     // win.webContents.openDevTools()
   })
 
-  // win.on('close', e => {
-  // })
-
   win.on('closed', e => {
     delete windowList[key]
   })
