@@ -7,7 +7,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin")
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
-
 const { NODE_ENV } = process.env
 
 const projectPath = process.cwd()
@@ -89,6 +88,7 @@ const webpackConfig = {
     new htmlWebpackPlugin({
       template: `${appPath}/index.html`,
       filename: 'index.html',
+      templateParameters: require('../config/app.config.js'),
     }),
     new webpack.ProvidePlugin({
       $api: 'src/api',

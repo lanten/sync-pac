@@ -13,7 +13,7 @@ export default class App extends React.Component {
   render() {
     return (
       <React.Fragment>
-        <Header></Header>
+        {/* <Header></Header> */}
         <div className="flex-1 flex row">
           <SiderMenu></SiderMenu>
           <div className="flex-1 main-container">

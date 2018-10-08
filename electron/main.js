@@ -2,6 +2,7 @@ const path = require('path')
 const { app, BrowserWindow } = require('electron')
 const { creatTray } = require('./tray')
 const { createWindow } = require('./window')
+require('./api')
 
 const { NODE_ENV } = process.env
 
@@ -23,7 +24,7 @@ if (NODE_ENV === 'development') {
 
 app.on('ready', () => {
   tray = creatTray()
-  createWindow('home')
+  createWindow('pac')
 })
 
 app.on('window-all-closed', e => {

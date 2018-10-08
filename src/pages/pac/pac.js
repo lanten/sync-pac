@@ -5,6 +5,15 @@ export default class pac extends React.Component {
     super(props)
   }
 
+  componentDidMount() {
+    // const api = remote.getGlobal('api')
+    // api.test(v => {
+    //   console.log(v)
+    // })
+    // console.log()
+    console.log($api)
+  }
+
   render() {
     return (
       <div>
