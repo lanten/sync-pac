@@ -1,8 +1,6 @@
 const fileActions = require('./fileActions')
 const apis = {
-  readFile({ resolve, reject, params }) {
-
-  }
+  ...fileActions,
 }
 
 module.exports = apis
