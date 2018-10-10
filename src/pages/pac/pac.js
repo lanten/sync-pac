@@ -13,11 +13,11 @@ export default class pac extends React.Component {
     // })
     // console.log()
 
-    // console.log($api)
-    const path = `${os.homedir()}/.ShadowsocksX-NG/user-rule.txt`
-    $api.electron('readFile', path).then(res => {
-      this.parsePAC()
-    })
+    console.log($app)
+    // const path = `${os.homedir()}/.ShadowsocksX-NG/user-rule.txt`
+    // $api.electron('readFile', path).then(res => {
+    //   this.parsePAC()
+    // })
 
   }
 

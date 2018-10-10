@@ -22,7 +22,7 @@ if (NODE_ENV === 'development') {
 }
 
 // 在  macOS dock 中隐藏
-app.dock.hide()
+// app.dock.hide()
 
 
 app.on('ready', () => {
