@@ -14,11 +14,8 @@ export default class App extends React.Component {
     return (
       <React.Fragment>
         {/* <Header></Header> */}
-        <div className="flex-1 flex row">
-          <SiderMenu></SiderMenu>
-          <div className="flex-1 main-container">
-            <Router routes={routes} />
-          </div>
+        <div className="flex-1 flex column">
+          <Router routes={routes} />
         </div>
       </React.Fragment>
     )

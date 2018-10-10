@@ -38,7 +38,7 @@ export function getPacList() {
  */
 export function parsePacList(data, hasGroup = true) {
   const REG_RULE = /(!\s*)?\|\|(.*\.)?(.+)(\..+)\^/g
-  const REG_GROUP = /! #-#-#-#-#-# \[(.*)\]\n(.*)\n! #-#-#-#-#-#/g
+  const REG_GROUP = /!\s*[#-]{10,}#\s*\[(.*)\]\n(.*)\n!\s*[#=]{10,}#/g
   const arr = []
 
   let str = hasGroup ? data.replace(REG_GROUP, (res, $1 = '', $2 = '') => {

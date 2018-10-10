@@ -7,9 +7,20 @@ body {
 #root {
   border-radius: 6px;
   height: 100%;
-  .main-container {
-    padding: @p;
+  .container {
     background-color: #fff;
+    &.padding {
+      padding: @p;
+    }
+    &.padding-x {
+      padding: 0 @p;
+    }
+    &.padding-y {
+      padding: @p 0;
+    }
+    &.scroll-y {
+      overflow-y: auto;
+    }
   }
 }
 
