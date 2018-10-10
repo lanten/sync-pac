@@ -1,6 +1,6 @@
 
 const $app = {
-  ...require('./fileActions')
+  ...require('./fn')
 }
 
 module.exports = $app
