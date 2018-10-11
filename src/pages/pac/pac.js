@@ -18,7 +18,7 @@ export default class pac extends React.Component {
     $app.getPacList().then(pacList => {
       this.setState({ pacList })
     }).catch(err => {
-      message.error('读取PAC文件出错,请查看日志')
+      message.error('读取PAC文件出错,请查看日志!')
       console.error(err)
     })
   }
