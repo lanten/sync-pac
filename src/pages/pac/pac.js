@@ -33,6 +33,25 @@ export default class pac extends React.Component {
     })
   }
 
+  // 渲染 pac 元素
+  renderPacListItem() {
+    return (
+      <div>{url}</div>
+    )
+  }
+
+  // 渲染行 (分组)
+  renderPacListRow({ group, name, url, domain, active }, rowIndex) {
+    const itemProps = group ? {
+      children: (
+        <div>group</div>
+      )
+    } : {
+        children: this.renderPacListItem(...arguments)
+      }
+    return <div className="pac-list-item" key={rowIndex} {...itemProps} />
+  }
+
   render() {
     const { pacList = [], siderMenus } = this.state
 
@@ -53,17 +72,6 @@ export default class pac extends React.Component {
         </div>
       </div>
     )
-  }
-
-  renderPacListRow({ group, name, url, domain, active }, rowIndex) {
-    const itemProps = group ? {
-      children: (
-        <div>group</div>
-      )
-    } : {
-        children: <div>{url}</div>
-      }
-    return <div className="pac-list-item" key={rowIndex} {...itemProps} />
   }
 
 } // class pac end
