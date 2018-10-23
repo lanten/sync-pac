@@ -34,7 +34,7 @@ export default class pac extends React.Component {
   }
 
   // 渲染 pac 元素
-  renderPacListItem() {
+  renderPacListItem({ url }, rowIndex) {
     return (
       <div>{url}</div>
     )
@@ -67,7 +67,7 @@ export default class pac extends React.Component {
             {/* <Icon type="plus-circle" theme="twoTone" style={{ fontSize: 24 }}></Icon> */}
           </div>
           <div className="flex-1 container padding scroll-y pac-list">
-            {pacList.map(this.renderPacListRow)}
+            {pacList.map(this.renderPacListRow.bind(this))}
           </div>
         </div>
       </div>
