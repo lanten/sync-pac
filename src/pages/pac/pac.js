@@ -11,12 +11,22 @@ export default class pac extends React.Component {
 
     this.state = {
       pacList: [],
+      siderMenus: [
+        {
+          name: 'default',
+          path: '',
+          action(e, itemData) {
+            console.log(e, itemData)
+          }
+        }
+      ]
     }
   }
 
   componentDidMount() {
     $app.getPacList().then(pacList => {
       this.setState({ pacList })
+      console.log(pacList)
     }).catch(err => {
       message.error('读取PAC文件出错,请查看日志!')
       console.error(err)
@@ -24,12 +34,12 @@ export default class pac extends React.Component {
   }
 
   render() {
-    const { pacList = [] } = this.state
+    const { pacList = [], siderMenus } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
         <div>
-          <SiderMenu />
+          <SiderMenu menus={siderMenus} />
         </div>
 
         <div className="flex-1 flex column">

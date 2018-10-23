@@ -6,17 +6,24 @@ import './SiderMenu.less'
 export default class SiderMenu extends React.Component {
   constructor(props) {
     super(props)
+
+    this.menuRef = React.createRef()
+  }
+
+  renderMenuItem(itemData, index) {
+    return <Menu.Item key={index} onClick={e => itemData.action(e, itemData)}>{itemData.name}</Menu.Item>
   }
 
   render() {
+    const { menus } = this.props
     return (
       <Menu
         className="sider-menu"
         mode="inline"
+        defaultSelectedKeys={['0']}
+        ref={this.menuRef}
       >
-          <Menu.Item key="1">PAC 管理</Menu.Item>
-          <Menu.Item key="2">Option 2</Menu.Item>
-          <Menu.Item key="3">Option 3</Menu.Item>
+        {menus.map(this.renderMenuItem)}
 
         {/* <Menu.SubMenu title="okkk1">
           <Menu.Item key="1">Option 1</Menu.Item>
