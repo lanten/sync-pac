@@ -58,8 +58,9 @@ export default class pac extends React.Component {
 
     return (
       <div className="flex-1 flex row page-pac">
-        <div>
+        <div className="sider-panel">
           <SiderMenu menus={siderMenus} />
+          <Button ghost className="add-btn" type="dashed" icon="plus">添加副本</Button>
         </div>
 
         <div className="flex-1 flex column">
