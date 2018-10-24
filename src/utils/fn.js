@@ -33,16 +33,13 @@ export function getPacList() {
 
 /**
  * 格式化 pac
- * @param {String} data 
+ * @param {String} data
+ * @param {Boolean} hasGroup 是否包含分组
  * @returns {Array}
  */
 export function parsePacList(data, hasGroup = true) {
   const REG_RULE = /(!\s*)?\|\|(.*\.)?(.+)(\..+)\^/g
-  // const REG_GROUP = /!\s*[#-]{10,}#\s*\[(.*)\]\n(.*)\n!\s*[#=]{10,}#/g
-  // const REG_GROUP = /!\s*##\s*\[(.+)-start\]\n(.+)\n!\s*##\s*\[(.+)-end\]/g
   const REG_GROUP = /!\s*##\s*\[(.+)-start\]([\s\S]*)!\s*##\s*\[(.+)-end\]/g
-  // const REG_GROUP = /!\s*##\s*\[(.+)-start\]\s*\n*([\s\S]*)/g
-  // const REG_GROUP = /!\s*##\s*\[(.+)-end\]/g
   const arr = []
 
   let str = hasGroup ? data.replace(REG_GROUP, (res, $1 = '', $2 = '', $3 = '') => {
@@ -55,13 +52,19 @@ export function parsePacList(data, hasGroup = true) {
     return ''
   }) : data
 
+  const obj = {}
   str.replace(REG_RULE, (res, active, $1 = '', $2 = '', $3 = '') => {
-    arr.push({
-      active: !active,
-      url: `${$1}${$2}${$3}`,
-      domain: `${$2}${$3}`,
-      host: $1.replace('.', ''),
-    })
+    const domain = `${$2}${$3}`
+    const host = $1 ? $1.replace('.', '') : '@'
+    if (obj[domain]) {
+      arr[obj[domain]].hosts.push({ active: !active, host })
+    } else {
+      obj[domain] = arr.length
+      arr.push({
+        domain,
+        hosts: [{ active: !active, host }],
+      })
+    }
   })
 
   return arr

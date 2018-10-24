@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Card, message, Button, Icon, Tooltip } from 'antd'
+import { Card, message, Button, Modal, Icon, Tooltip } from 'antd'
 
 import { SiderMenu } from '../../components'
 import './pac.less'
@@ -19,7 +19,8 @@ export default class pac extends React.Component {
             console.log(e, itemData)
           }
         }
-      ]
+      ],
+      modalPacVisible: false,
     }
   }
 
@@ -53,7 +54,7 @@ export default class pac extends React.Component {
   }
 
   render() {
-    const { pacList = [], siderMenus } = this.state
+    const { pacList = [], siderMenus, modalPacVisible } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
@@ -63,15 +64,32 @@ export default class pac extends React.Component {
 
         <div className="flex-1 flex column">
           <div className="action-bar">
-            <Button size="small" icon="plus"></Button>
+            <Button size="small" icon="plus" onClick={() => this.setState({ modalPacVisible: true })}></Button>
             {/* <Icon type="plus-circle" theme="twoTone" style={{ fontSize: 24 }}></Icon> */}
           </div>
           <div className="flex-1 container padding scroll-y pac-list">
             {pacList.map(this.renderPacListRow.bind(this))}
           </div>
         </div>
+
+        <Modal
+          destroyOnClose
+          className="modal-pac"
+          title={'新增规则'}
+          visible={modalPacVisible}
+          cancelText="仅保存"
+          okText="保存并同步"
+          footer={this.renderModalFooter()}
+          onCancel={() => this.setState({ modalPacVisible: false })}
+        >
+        </Modal>
       </div>
     )
+  }
+
+  renderModalFooter(e) {
+    console.log(e)
+    return <div>123</div>
   }
 
 } // class pac end
