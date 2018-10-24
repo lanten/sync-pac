@@ -52,6 +52,7 @@ export function parsePacList(data, hasGroup = true) {
     return ''
   }) : data
 
+  // 同域名下的多条记录将会被合并
   const obj = {}
   str.replace(REG_RULE, (res, active, $1 = '', $2 = '', $3 = '') => {
     const domain = `${$2}${$3}`

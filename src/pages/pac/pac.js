@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { Card, message, Button, Modal, Icon, Tooltip } from 'antd'
+import { message, Button, Modal, Icon, Tooltip } from 'antd'
 
-import { SiderMenu } from '../../components'
+import { SiderMenu, Card } from '../../components'
 import './pac.less'
 
 export default class pac extends React.Component {
