@@ -44,9 +44,9 @@ export default class pac extends React.Component {
           <h3><Checkbox>{domain}</Checkbox></h3>
           <span className="flex-1"></span>
           <div className="flex row actions">
-            <Button size="small" icon="edit"></Button>
+            <Button shape="circle" size="small" icon="edit"></Button>
             <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={this.deletePacItem} okText="Yes" cancelText="No">
-              <Button size="small" icon="delete" type="danger" ghost></Button>
+              <Button shape="circle" size="small" icon="delete" type="danger" ghost></Button>
             </Popconfirm>
           </div>
         </div>
