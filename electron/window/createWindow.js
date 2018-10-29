@@ -14,13 +14,17 @@ const windowList = {}
  * @param {String} urlKey 
  */
 function getWindowUrl(key) {
-  let winURL, hash = urls[key]
-  if (NODE_ENV === 'development') {
-    winURL = `http://localhost:${port}#${hash}`
-  } else {
-    winURL = `file://${path.join(__dirname, '../../dist/index.html')}#${hash}`
+  let url, hash = urls[key], config = {}
+  if (typeof hash === 'object') {
+    config = hash.config || {}
+    hash = hash.url
   }
-  return winURL
+  if (NODE_ENV === 'development') {
+    url = `http://localhost:${port}#${hash}`
+  } else {
+    url = `file://${path.join(__dirname, '../../dist/index.html')}#${hash}`
+  }
+  return { url, config }
 }
 
 /**
@@ -30,10 +34,14 @@ function getWindowUrl(key) {
  */
 function createWindow(key, options = {}) {
   let win = windowList[key]
+
   if (windowList[key]) {
     win.show()
     return win
   }
+
+  const { url, config } = getWindowUrl(key)
+
   const defaultOptions = {
     icon: appIcon,
     width: 800,
@@ -46,11 +54,12 @@ function createWindow(key, options = {}) {
     // transparent: true, // 窗口是否透明
     // titleBarStyle: 'hidden',
     vibrancy: 'appearance-based',
+    ...config
   }
   win = new BrowserWindow(Object.assign(defaultOptions, options))
   // console.log(win.webContents.location)
   windowList[key] = win
-  win.loadURL(getWindowUrl(key))
+  win.loadURL(url)
   win.once('ready-to-show', () => {
     win.show()
     win.webContents.openDevTools()

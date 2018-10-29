@@ -1,6 +1,6 @@
 const urls = {
-  home:'/',
-  pac:'/pac',
+  home: '/',
+  pac: { url: '/pac', config: { minWidth: 600, minHeight: 400 } },
 }
 
 
