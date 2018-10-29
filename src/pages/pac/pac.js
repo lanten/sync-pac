@@ -50,7 +50,6 @@ export default class pac extends React.Component {
             </Popconfirm>
           </div>
         </div>
-
         <div className="host-list">
           {hosts.map(({ active, host }, i) => {
             console.log(host)
