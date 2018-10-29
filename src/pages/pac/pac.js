@@ -35,9 +35,9 @@ export default class pac extends React.Component {
   }
 
   // 渲染 pac 元素
-  renderPacListItem({ url }, rowIndex) {
+  renderPacListItem({ domain }, rowIndex) {
     return (
-      <div>{url}</div>
+      <div>{domain}</div>
     )
   }
 

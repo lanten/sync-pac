@@ -1,9 +1,15 @@
 @import '../../styles/var.less';
 .page-pac {
-  .pac-list-item {
-    margin-bottom: @p;
-    &:last-child {
-      margin-bottom: 0;
+  .pac-list {
+    &-item {
+      background-color: #fff;
+      border-radius: 4px;
+      padding: @p/2 @p;
+      box-shadow: @shadow;
+      margin-bottom: @p;
+      &:last-child {
+        margin-bottom: 0;
+      }
     }
   }
   .action-bar {
