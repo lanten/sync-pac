@@ -56,8 +56,8 @@ const webpackConfig = {
               javascriptEnabled: true,
               modifyVars: {
                 // 更改主题色
-                // 'primary-color': '#3897BC',
-                'primary-color': '#74839b',
+                'primary-color': '#3897BC',
+                // 'primary-color': '#74839b',
               },
             }
           }

@@ -1,5 +1,4 @@
 @import '../../styles/var.less';
-
 .sider-menu {
   border-right: 0;
   width: 100%;
@@ -17,9 +16,11 @@
     &::after {
       right: auto !important;
       left: 0;
+      border-color: @color_gray;
     }
     &.ant-menu-item-selected {
-      background-color: fade(lighten(@color_main, 45), 45);
+      color: @color_gray;
+      background-color: fade(lighten(@color_gray, 45), 45);
     }
   }
 }

@@ -1,7 +1,7 @@
 @import '../../styles/var.less';
 .page-pac {
   .pac-list {
-    &-item {
+    &-card {
       background-color: #fff;
       border-radius: 4px;
       padding: @p/2 @p;
@@ -9,6 +9,27 @@
       margin-bottom: @p;
       &:last-child {
         margin-bottom: 0;
+      }
+    }
+    &-group {
+      .pac-list-item {
+        border-top: 1px dashed @color_border;
+        padding-top: @p/2;
+        margin-top: @p/2;
+      }
+    }
+    &-item {
+      .host-list {
+        margin-top: @p/2;
+        .tag {
+          min-width: 30px;
+          text-align: center;
+        }
+      }
+      .actions {
+        button:not(:last-child) {
+          margin-right: @p/2;
+        }
       }
     }
   }

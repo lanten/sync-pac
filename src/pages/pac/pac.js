@@ -1,9 +1,11 @@
 import React from 'react'
 
-import { message, Button, Modal, Icon, Tooltip } from 'antd'
+import { message, Button, Modal, Icon, Tooltip, Checkbox, Tag, Popconfirm } from 'antd'
 
-import { SiderMenu, Card } from '../../components'
+import { SiderMenu } from '../../components'
 import './pac.less'
+
+
 
 export default class pac extends React.Component {
   constructor(props) {
@@ -35,24 +37,52 @@ export default class pac extends React.Component {
   }
 
   // 渲染 pac 元素
-  renderPacListItem({ domain }, rowIndex) {
+  renderPacListItem({ domain, hosts }, rowIndex) {
     return (
-      <div>{domain}</div>
+      <div className="pac-list-item" key={rowIndex}>
+        <div className="flex row center-v">
+          <h3><Checkbox>{domain}</Checkbox></h3>
+          <span className="flex-1"></span>
+          <div className="flex row actions">
+            <Button size="small" icon="edit"></Button>
+            <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={this.deletePacItem} okText="Yes" cancelText="No">
+              <Button size="small" icon="delete" type="danger" ghost></Button>
+            </Popconfirm>
+          </div>
+        </div>
+
+        <div className="host-list">
+          {hosts.map(({ active, host }, i) => {
+            console.log(host)
+            return <Tag.CheckableTag className="no-touch tag" checked={active} key={i}>{host}</Tag.CheckableTag>
+          })}
+
+        </div>
+
+      </div>
     )
   }
 
   // 渲染行 (分组)
-  renderPacListRow({ group, name, url, domain, active }, rowIndex) {
+  renderPacListRow({ group, name = '未命名分组', list }, rowIndex) {
     const itemProps = group ? {
       children: (
-        <div>group</div>
+        <div className="pac-list-group">
+          <h2 className="group-title">{name}</h2>
+          {list.map(this.renderPacListItem.bind(this))}
+        </div>
       )
     } : {
         children: this.renderPacListItem(...arguments)
       }
-    return <div className="pac-list-item" key={rowIndex} {...itemProps} />
+    return <div className="pac-list-card" key={rowIndex} {...itemProps} />
   }
 
+  deletePacItem() {
+
+  }
+
+  // 
   render() {
     const { pacList = [], siderMenus, modalPacVisible } = this.state
 
@@ -88,8 +118,7 @@ export default class pac extends React.Component {
     )
   }
 
-  renderModalFooter(e) {
-    console.log(e)
+  renderModalFooter() {
     return <div>123</div>
   }
 
