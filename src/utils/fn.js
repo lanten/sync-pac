@@ -58,7 +58,10 @@ export function parsePacList(data, hasGroup = true) {
     const domain = `${$2}${$3}`
     const host = $1 ? $1.replace('.', '') : '@'
     if (obj[domain]) {
-      arr[obj[domain]].hosts.push({ active: !active, host })
+      const hostsArr = arr[obj[domain]].hosts
+      const hostIndex = hostsArr.findIndex(val => host === val.host)
+      // 相同域名下重复的 host 将会被忽略
+      if (hostIndex < 0) hostsArr.push({ active: !active, host })
     } else {
       obj[domain] = arr.length
       arr.push({

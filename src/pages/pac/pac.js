@@ -37,18 +37,26 @@ export default class pac extends React.Component {
   }
 
   // 渲染 pac 元素
-  renderPacListItem({ domain, hosts }, rowIndex) {
+  renderPacListItem({ domain, hosts }, rowIndex, groupIndex) {
     const checkBoxOptions = []
     const checkBoxValues = []
     hosts.forEach(({ active, host }) => {
       checkBoxOptions.push(host)
       if (active) checkBoxValues.push(host)
     })
+    const allChecked = checkBoxOptions.length === checkBoxValues.length
+    const indeterminate = checkBoxValues.length && (checkBoxOptions.length !== checkBoxValues.length)
     return (
       <div className="pac-list-item" key={rowIndex}>
         <div className="flex row center-v">
-          <h3>{domain}</h3>
+          <h3>
+            <Checkbox checked={allChecked} indeterminate={indeterminate} onChange={({ target: { checked } }) => {
+              this.setPacHosts(checked ? 'all' : [], rowIndex, groupIndex)
+            }}>{domain}</Checkbox>
+          </h3>
+
           <span className="flex-1"></span>
+
           <div className="flex row actions">
             <Button shape="circle" size="small" icon="edit"></Button>
             <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={this.deletePacItem} okText="Yes" cancelText="No">
@@ -57,12 +65,8 @@ export default class pac extends React.Component {
           </div>
         </div>
         <div className="host-list">
-          {/* {hosts.map(({ active, host }, i) => {
-            console.log(host)
-            return <Tag.CheckableTag className="no-touch tag" checked={active} key={i}>{host}</Tag.CheckableTag>
-          })} */}
-          <Checkbox.Group options={checkBoxOptions} value={checkBoxValues} onChange={(e)=>{
-            console.log(e)
+          <Checkbox.Group options={checkBoxOptions} value={checkBoxValues} onChange={(e) => {
+            this.setPacHosts(e, rowIndex, groupIndex)
           }} />
         </div>
 
@@ -76,17 +80,13 @@ export default class pac extends React.Component {
       children: (
         <div className="pac-list-group">
           <h2 className="group-title">{name}</h2>
-          {list.map(this.renderPacListItem.bind(this))}
+          {list.map((v, i) => this.renderPacListItem(v, i, rowIndex))}
         </div>
       )
     } : {
         children: this.renderPacListItem(...arguments)
       }
     return <div className="pac-list-card" key={rowIndex} {...itemProps} />
-  }
-
-  deletePacItem() {
-
   }
 
   // 
@@ -125,8 +125,34 @@ export default class pac extends React.Component {
     )
   }
 
+  // 渲染弹框页脚
   renderModalFooter() {
     return <div>123</div>
+  }
+
+  // 删除 pac 规则
+  deletePacItem() {
+
+  }
+
+  /**
+   * 设置 host
+   * @param {Array} newValue 
+   * @param {Number} rowIndex 
+   * @param {Number} groupIndex 
+   */
+  setPacHosts(newValue, rowIndex, groupIndex) {
+    const { pacList } = this.state
+    if (typeof groupIndex === 'number') {
+      pacList[groupIndex].list[rowIndex].hosts = pacList[groupIndex].list[rowIndex].hosts.map(({ host }) => {
+        return { host: host, active: newValue === 'all' ? true : newValue.indexOf(host) > -1 }
+      })
+    } else {
+      pacList[rowIndex].hosts = pacList[rowIndex].hosts.map(({ host }) => {
+        return { host: host, active: newValue === 'all' ? true : newValue.indexOf(host) > -1 }
+      })
+    }
+    this.setState({ pacList })
   }
 
 } // class pac end
