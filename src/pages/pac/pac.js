@@ -37,7 +37,7 @@ export default class pac extends React.Component {
   }
 
   // 渲染 pac 元素
-  renderPacListItem({ domain, hosts }, rowIndex, groupIndex) {
+  renderPacListItem({ domain, hosts, showDetail }, rowIndex, groupIndex) {
     const checkBoxOptions = []
     const checkBoxValues = []
     hosts.forEach(({ active, host }) => {
@@ -46,6 +46,7 @@ export default class pac extends React.Component {
     })
     const allChecked = checkBoxOptions.length === checkBoxValues.length
     const indeterminate = checkBoxValues.length && (checkBoxOptions.length !== checkBoxValues.length)
+    // if (indeterminate) showDetail = true
     return (
       <div className="pac-list-item" key={rowIndex}>
         <div className="flex row center-v">
@@ -58,18 +59,29 @@ export default class pac extends React.Component {
           <span className="flex-1"></span>
 
           <div className="flex row actions">
+            <Button shape="circle" size="small" icon={showDetail ? 'caret-up' : 'caret-down'} onClick={() => {
+              if (typeof groupIndex === 'number') {
+                this.state.pacList[groupIndex].list[rowIndex].showDetail = !showDetail
+              } else {
+                this.state.pacList[rowIndex].showDetail = !showDetail
+              }
+              this.setState({ pacList: this.state.pacList })
+            }}></Button>
             <Button shape="circle" size="small" icon="edit"></Button>
             <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={this.deletePacItem} okText="Yes" cancelText="No">
               <Button shape="circle" size="small" icon="delete" type="danger" ghost></Button>
             </Popconfirm>
           </div>
         </div>
-        <div className="host-list">
-          <Checkbox.Group options={checkBoxOptions} value={checkBoxValues} onChange={(e) => {
-            this.setPacHosts(e, rowIndex, groupIndex)
-          }} />
-        </div>
-
+        {
+          showDetail && (
+            <div className="host-list">
+              <Checkbox.Group options={checkBoxOptions} value={checkBoxValues} onChange={(e) => {
+                this.setPacHosts(e, rowIndex, groupIndex)
+              }} />
+            </div>
+          )
+        }
       </div>
     )
   }
@@ -101,8 +113,11 @@ export default class pac extends React.Component {
         </div>
 
         <div className="flex-1 flex column">
-          <div className="action-bar">
+          <div className="flex row action-bar">
             <Button size="small" icon="plus" onClick={() => this.setState({ modalPacVisible: true })}></Button>
+            <span className="flex-1"></span>
+            <Button size="small" icon="share-alt"></Button>
+            <Button size="small" icon="sync"></Button>
             {/* <Icon type="plus-circle" theme="twoTone" style={{ fontSize: 24 }}></Icon> */}
           </div>
           <div className="flex-1 container padding scroll-y pac-list">
