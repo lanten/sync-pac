@@ -1,6 +1,7 @@
 @import '../../styles/var.less';
 .page-pac {
   .pac-list {
+    user-select: none;
     &-card {
       background-color: #fff;
       border-radius: 4px;
@@ -16,6 +17,9 @@
         border-top: 1px dashed @color_border;
         padding-top: @p/2;
         margin-top: @p/2;
+      }
+      .group-title {
+        cursor: default;
       }
     }
     &-item {

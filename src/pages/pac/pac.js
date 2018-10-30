@@ -23,6 +23,7 @@ export default class pac extends React.Component {
         }
       ],
       modalPacVisible: false,
+      modifyData: undefined,
     }
   }
 
@@ -50,7 +51,7 @@ export default class pac extends React.Component {
     return (
       <div className="pac-list-item" key={rowIndex}>
         <div className="flex row center-v">
-          <h3>
+          <h3 className="item-title">
             <Checkbox checked={allChecked} indeterminate={indeterminate} onChange={({ target: { checked } }) => {
               this.setPacHosts(checked ? 'all' : [], rowIndex, groupIndex)
             }}>{domain}</Checkbox>
@@ -67,8 +68,8 @@ export default class pac extends React.Component {
               }
               this.setState({ pacList: this.state.pacList })
             }}></Button>
-            <Button shape="circle" size="small" icon="edit"></Button>
-            <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={this.deletePacItem} okText="Yes" cancelText="No">
+            <Button shape="circle" size="small" icon="edit" onClick={() => this.modifyPacItem(...arguments)}></Button>
+            <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)} okText="Yes" cancelText="No">
               <Button shape="circle" size="small" icon="delete" type="danger" ghost></Button>
             </Popconfirm>
           </div>
@@ -103,7 +104,7 @@ export default class pac extends React.Component {
 
   // 
   render() {
-    const { pacList = [], siderMenus, modalPacVisible } = this.state
+    const { pacList = [], siderMenus, modalPacVisible, modifyData } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
@@ -114,7 +115,7 @@ export default class pac extends React.Component {
 
         <div className="flex-1 flex column">
           <div className="flex row action-bar">
-            <Button size="small" icon="plus" onClick={() => this.setState({ modalPacVisible: true })}></Button>
+            <Button size="small" icon="plus" onClick={() => this.addPacItem()}></Button>
             <span className="flex-1"></span>
             <Button size="small" icon="share-alt"></Button>
             <Button size="small" icon="sync"></Button>
@@ -127,11 +128,10 @@ export default class pac extends React.Component {
 
         <Modal
           destroyOnClose
+          mask={false}
           className="modal-pac"
-          title={'新增规则'}
+          title={modifyData ? modifyData.data.domain : '新增规则'}
           visible={modalPacVisible}
-          cancelText="仅保存"
-          okText="保存并同步"
           footer={this.renderModalFooter()}
           onCancel={() => this.setState({ modalPacVisible: false })}
         >
@@ -142,10 +142,28 @@ export default class pac extends React.Component {
 
   // 渲染弹框页脚
   renderModalFooter() {
-    return <div>123</div>
+    const { modifyData } = this.state
+    return (
+      <div className="flex row modal-footer">
+        <Button>取消</Button>
+        <span className="flex-1"></span>
+        <Button icon="sync">{`${modifyData ? '保存' : '添加'}并同步`}</Button>
+        <Button icon={modifyData ? 'save' : 'plus-circle'} type="primary" >{modifyData ? '保存' : '添加'}</Button>
+      </div>
+    )
   }
 
-  // 删除 pac 规则
+  // 添加新规则
+  addPacItem() {
+    this.setState({ modalPacVisible: true, modifyData: false })
+  }
+
+  // 修改规则
+  modifyPacItem(data, rowIndex, groupIndex) {
+    this.setState({ modalPacVisible: true, modifyData: { data, rowIndex, groupIndex } })
+  }
+
+  // 删除规则
   deletePacItem() {
 
   }
