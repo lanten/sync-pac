@@ -160,11 +160,11 @@ export default class pac extends React.Component {
     const { pacList } = this.state
     if (typeof groupIndex === 'number') {
       pacList[groupIndex].list[rowIndex].hosts = pacList[groupIndex].list[rowIndex].hosts.map(({ host }) => {
-        return { host: host, active: newValue === 'all' ? true : newValue.indexOf(host) > -1 }
+        return { host: host, active: newValue === 'all' ? true : newValue.includes(host) }
       })
     } else {
       pacList[rowIndex].hosts = pacList[rowIndex].hosts.map(({ host }) => {
-        return { host: host, active: newValue === 'all' ? true : newValue.indexOf(host) > -1 }
+        return { host: host, active: newValue === 'all' ? true : newValue.includes(host) }
       })
     }
     this.setState({ pacList })
