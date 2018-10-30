@@ -38,10 +38,16 @@ export default class pac extends React.Component {
 
   // 渲染 pac 元素
   renderPacListItem({ domain, hosts }, rowIndex) {
+    const checkBoxOptions = []
+    const checkBoxValues = []
+    hosts.forEach(({ active, host }) => {
+      checkBoxOptions.push(host)
+      if (active) checkBoxValues.push(host)
+    })
     return (
       <div className="pac-list-item" key={rowIndex}>
         <div className="flex row center-v">
-          <h3><Checkbox>{domain}</Checkbox></h3>
+          <h3>{domain}</h3>
           <span className="flex-1"></span>
           <div className="flex row actions">
             <Button shape="circle" size="small" icon="edit"></Button>
@@ -51,11 +57,13 @@ export default class pac extends React.Component {
           </div>
         </div>
         <div className="host-list">
-          {hosts.map(({ active, host }, i) => {
+          {/* {hosts.map(({ active, host }, i) => {
             console.log(host)
             return <Tag.CheckableTag className="no-touch tag" checked={active} key={i}>{host}</Tag.CheckableTag>
-          })}
-
+          })} */}
+          <Checkbox.Group options={checkBoxOptions} value={checkBoxValues} onChange={(e)=>{
+            console.log(e)
+          }} />
         </div>
 
       </div>
