@@ -41,7 +41,7 @@ export default class Main extends React.Component {
             <Input placeholder="template.com" defaultValue={domain} />
           </Form.Item>
           <Form.Item label="子域" {...formItemProps}
-            help="@表示空 *表示全部 用逗号隔开 如: @,*,www"
+            help="@表示空; *表示全部"
           >
             <Select
               mode="tags"
@@ -54,10 +54,10 @@ export default class Main extends React.Component {
               <Select.Option key="www">www</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="注释" {...formItemProps}
+          <Form.Item label="描述" {...formItemProps}
             help="规则的注释,如: 谷歌首页"
           >
-            <Input placeholder="/**/" />
+            <Input placeholder="随便什么描述" />
           </Form.Item>
         </Form>
       </Modal>
