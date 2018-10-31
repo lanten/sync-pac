@@ -22,13 +22,15 @@ export default class Main extends React.Component {
 
   render() {
     const { modalVisible } = this.state
-    const { modifyData } = this.props
+    const { modifyData = {} } = this.props
+    const { domain, hosts } = modifyData
+    console.log(modifyData)
     return (
       <Modal
-        // destroyOnClose 
+        destroyOnClose
         mask={false}
         className="modal-pac"
-        title={modifyData ? modifyData.data.domain : '新增规则'}
+        title={domain ? domain : '新增规则'}
         visible={modalVisible}
         footer={this.renderModalFooter()}
         onCancel={() => this.setState({ modalVisible: false })}
@@ -37,7 +39,7 @@ export default class Main extends React.Component {
           <Form.Item label="域名" {...formItemProps}
             help="域名不包含子域 如: google.com"
           >
-            <Input placeholder="template.com" />
+            <Input placeholder="template.com" defaultValue={domain} />
           </Form.Item>
           <Form.Item label="子域" {...formItemProps}
             help="@表示空 *表示全部 用逗号隔开 如: @,*,www"
@@ -45,7 +47,7 @@ export default class Main extends React.Component {
             <Select
               mode="tags"
               placeholder="@,*"
-              defaultValue={['@', '*']}
+              defaultValue={hosts ? hosts.map(val => val.host) : ['@', '*']}
               tokenSeparators={[',']}
             >
               <Select.Option key="@">@</Select.Option>

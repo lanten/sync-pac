@@ -15,7 +15,7 @@ export default class pac extends React.Component {
 
     this.state = {
       pacList: [],
-      modifyData: undefined,
+      modifyData: {},
       siderMenus: [
         {
           name: 'default',
@@ -136,13 +136,13 @@ export default class pac extends React.Component {
 
   // 添加新规则
   addPacItem() {
-    this.setState({ modifyData: false })
+    this.setState({ modifyData: {} })
     this.pacModalRef.current.show()
   }
 
   // 修改规则
   modifyPacItem(data, rowIndex, groupIndex) {
-    this.setState({ modifyData: { data, rowIndex, groupIndex } })
+    this.setState({ modifyData: Object.assign(data, { rowIndex, groupIndex }) })
     this.pacModalRef.current.show()
   }
 
