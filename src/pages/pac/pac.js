@@ -1,11 +1,13 @@
 import React from 'react'
 
-import { message, Button, Modal, Icon, Tooltip, Checkbox, Tag, Popconfirm } from 'antd'
+import {
+  message, Button, Icon, Tooltip,
+  Checkbox, Popconfirm,
+} from 'antd'
 
 import { SiderMenu } from '../../components'
+import PacModal from './components/PacModal'
 import './pac.less'
-
-
 
 export default class pac extends React.Component {
   constructor(props) {
@@ -13,6 +15,7 @@ export default class pac extends React.Component {
 
     this.state = {
       pacList: [],
+      modifyData: undefined,
       siderMenus: [
         {
           name: 'default',
@@ -22,9 +25,9 @@ export default class pac extends React.Component {
           }
         }
       ],
-      modalPacVisible: false,
-      modifyData: undefined,
     }
+
+    this.pacModalRef = React.createRef()
   }
 
   componentDidMount() {
@@ -104,7 +107,7 @@ export default class pac extends React.Component {
 
   // 
   render() {
-    const { pacList = [], siderMenus, modalPacVisible, modifyData } = this.state
+    const { pacList = [], siderMenus, modifyData } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
@@ -126,41 +129,21 @@ export default class pac extends React.Component {
           </div>
         </div>
 
-        <Modal
-          destroyOnClose
-          mask={false}
-          className="modal-pac"
-          title={modifyData ? modifyData.data.domain : '新增规则'}
-          visible={modalPacVisible}
-          footer={this.renderModalFooter()}
-          onCancel={() => this.setState({ modalPacVisible: false })}
-        >
-        </Modal>
-      </div>
-    )
-  }
-
-  // 渲染弹框页脚
-  renderModalFooter() {
-    const { modifyData } = this.state
-    return (
-      <div className="flex row modal-footer">
-        <Button>取消</Button>
-        <span className="flex-1"></span>
-        <Button icon="sync">{`${modifyData ? '保存' : '添加'}并同步`}</Button>
-        <Button icon={modifyData ? 'save' : 'plus-circle'} type="primary" >{modifyData ? '保存' : '添加'}</Button>
+        <PacModal ref={this.pacModalRef} modifyData={modifyData} />
       </div>
     )
   }
 
   // 添加新规则
   addPacItem() {
-    this.setState({ modalPacVisible: true, modifyData: false })
+    this.setState({ modifyData: false })
+    this.pacModalRef.current.show()
   }
 
   // 修改规则
   modifyPacItem(data, rowIndex, groupIndex) {
-    this.setState({ modalPacVisible: true, modifyData: { data, rowIndex, groupIndex } })
+    this.setState({ modifyData: { data, rowIndex, groupIndex } })
+    this.pacModalRef.current.show()
   }
 
   // 删除规则
