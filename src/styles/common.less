@@ -32,7 +32,15 @@ body {
 }
 
 .loopFontSize(48);
-
-.no-touch{
+.no-touch {
   user-select: none;
+}
+
+.text {
+  each(@colors, {
+    &-@{key} {
+      color: @value;
+    }
+  }
+  );
 }

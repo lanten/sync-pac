@@ -24,7 +24,6 @@ export default class Main extends React.Component {
     const { modalVisible } = this.state
     const { modifyData = {} } = this.props
     const { domain, hosts } = modifyData
-    console.log(modifyData)
     return (
       <Modal
         destroyOnClose

@@ -1,13 +1,13 @@
-import React from 'react'
-import { Router } from './components'
-import routes from './pages/routes'
-import './styles/index.less'
+import React from "react";
+import { Router } from "./components";
+import routes from "./pages/routes";
+import "./styles/index.less";
 
-import { SiderMenu, Header } from './components'
+import { SiderMenu, Header } from "./components";
 
 export default class App extends React.Component {
   constructor(props) {
-    super(props)
+    super(props);
   }
 
   render() {
@@ -18,9 +18,8 @@ export default class App extends React.Component {
           <Router routes={routes} />
         </div>
       </React.Fragment>
-    )
+    );
   }
-
 } // class App end
 
 // global.ipcFunction = {
@@ -28,7 +27,6 @@ export default class App extends React.Component {
 //     location.hash = `#${val}`
 //   }
 // }
-
 
 // ipcRenderer.on('common', (e, data) => {
 //   const { }

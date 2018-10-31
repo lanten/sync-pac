@@ -54,13 +54,13 @@ export default class pac extends React.Component {
     return (
       <div className="pac-list-item" key={rowIndex}>
         <div className="flex row center-v">
-          <h3 className="item-title">
-            <Checkbox checked={allChecked} indeterminate={indeterminate} onChange={({ target: { checked } }) => {
-              this.setPacHosts(checked ? 'all' : [], rowIndex, groupIndex)
-            }}>{domain}</Checkbox>
-          </h3>
-
-          <span className="flex-1"></span>
+          <Checkbox className="flex-1" checked={allChecked} indeterminate={indeterminate} onChange={({ target: { checked } }) => {
+            this.setPacHosts(checked ? 'all' : [], rowIndex, groupIndex)
+          }}>
+            <h3 className="text-light item-title">
+              {domain}
+            </h3>
+          </Checkbox>
 
           <div className="flex row actions">
             <Button shape="circle" size="small" icon={showDetail ? 'caret-up' : 'caret-down'} onClick={() => {
@@ -80,7 +80,7 @@ export default class pac extends React.Component {
         {
           showDetail && (
             <div className="host-list">
-              <Checkbox.Group options={checkBoxOptions} value={checkBoxValues} onChange={(e) => {
+              <Checkbox.Group className="text-light" options={checkBoxOptions} value={checkBoxValues} onChange={(e) => {
                 this.setPacHosts(e, rowIndex, groupIndex)
               }} />
             </div>
