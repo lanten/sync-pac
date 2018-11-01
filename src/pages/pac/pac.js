@@ -57,7 +57,7 @@ export default class pac extends React.Component {
           <Checkbox className="flex-1" checked={allChecked} indeterminate={indeterminate} onChange={({ target: { checked } }) => {
             this.setPacHosts(checked ? 'all' : [], rowIndex, groupIndex)
           }}>
-            <h3 className="text-light item-title">
+            <h3 className="text-gray item-title">
               {domain}
             </h3>
           </Checkbox>
@@ -100,7 +100,7 @@ export default class pac extends React.Component {
         </div>
       )
     } : {
-        children: this.renderPacListItem(...arguments)
+        children: this.renderPacListItem(arguments[0], arguments[1])
       }
     return <div className="pac-list-card" key={rowIndex} {...itemProps} />
   }
@@ -129,25 +129,52 @@ export default class pac extends React.Component {
           </div>
         </div>
 
-        <PacModal ref={this.pacModalRef} modifyData={modifyData} />
+        <PacModal ref={this.pacModalRef} modifyData={modifyData} confirm={this.modalConfirm} />
       </div>
     )
   }
 
   // 添加新规则
   addPacItem() {
-    this.setState({ modifyData: {} })
-    this.pacModalRef.current.show()
+    this.setState({ modifyData: undefined }, () => {
+      this.pacModalRef.current.show()
+    })
   }
 
   // 修改规则
   modifyPacItem(data, rowIndex, groupIndex) {
-    this.setState({ modifyData: Object.assign(data, { rowIndex, groupIndex }) })
-    this.pacModalRef.current.show()
+    console.log(groupIndex)
+    this.setState({ modifyData: Object.assign(data, { rowIndex, groupIndex }) }, () => {
+      this.pacModalRef.current.show()
+    })
   }
 
   // 删除规则
   deletePacItem() {
+
+  }
+
+  //  新增/修改 回调
+  modalConfirm = (type, newData) => {
+    console.log(type, newData)
+    const { pacList } = this.state
+
+    if (type === 'add') {
+      pacList.unshift(newData)
+    } else if (type === 'modify') {
+      const { rowIndex, groupIndex } = newData
+      if (typeof groupIndex === 'number') {
+        pacList[groupIndex].list[rowIndex] = newData
+      } else {
+        pacList[rowIndex] = newData
+      }
+    }
+
+    this.setState({ pacList }, () => {
+      this.pacModalRef.current.hide()
+    })
+
+    console.log(pacList)
 
   }
 
