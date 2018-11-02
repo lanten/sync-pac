@@ -1,3 +1,5 @@
 
 
-export { default as electron } from './api.electron'
+module.exports = {
+  ...require('./api.electron')
+}

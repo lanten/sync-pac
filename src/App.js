@@ -3,8 +3,6 @@ import { Router } from "./components";
 import routes from "./pages/routes";
 import "./styles/index.less";
 
-import { SiderMenu, Header } from "./components";
-
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,13 +19,3 @@ export default class App extends React.Component {
     );
   }
 } // class App end
-
-// global.ipcFunction = {
-//   router(val) {
-//     location.hash = `#${val}`
-//   }
-// }
-
-// ipcRenderer.on('common', (e, data) => {
-//   const { }
-// })

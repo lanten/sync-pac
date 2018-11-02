@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {
-  message, Button, Icon, Tooltip,
+  message, Button,
   Checkbox, Popconfirm,
 } from 'antd'
 
@@ -31,11 +31,11 @@ export default class pac extends React.Component {
   }
 
   componentDidMount() {
-    $app.getPacList().then(pacList => {
+    console.log($api)
+    $api.getPacList().then(pacList => {
       this.setState({ pacList })
-      console.log(pacList)
     }).catch(err => {
-      message.error('读取PAC文件出错,请查看日志!')
+      message.error('读取PAC文件出错,请查看处理日志!')
       console.error(err)
     })
   }
@@ -50,7 +50,6 @@ export default class pac extends React.Component {
     })
     const allChecked = checkBoxOptions.length === checkBoxValues.length
     const indeterminate = checkBoxValues.length && (checkBoxOptions.length !== checkBoxValues.length)
-    // if (indeterminate) showDetail = true
     return (
       <div className="pac-list-item" key={rowIndex}>
         <div className="flex row center-v">
@@ -143,7 +142,6 @@ export default class pac extends React.Component {
 
   // 修改规则
   modifyPacItem(data, rowIndex, groupIndex) {
-    console.log(groupIndex)
     this.setState({ modifyData: Object.assign(data, { rowIndex, groupIndex }) }, () => {
       this.pacModalRef.current.show()
     })
@@ -156,7 +154,6 @@ export default class pac extends React.Component {
 
   //  新增/修改 回调
   modalConfirm = (type, newData) => {
-    console.log(type, newData)
     const { pacList } = this.state
 
     if (type === 'add') {
@@ -174,7 +171,7 @@ export default class pac extends React.Component {
       this.pacModalRef.current.hide()
     })
 
-    console.log(pacList)
+    $api.setPacList(pacList)
 
   }
 
