@@ -92,9 +92,7 @@ function getUserRulePath() {
       setConfig({ userRulePath: path })
       resolve(path)
     } else {
-      // 设置路径窗口
-
-
+      reject()
     }
   })
 }
