@@ -142,14 +142,24 @@ export default class pac extends React.Component {
 
   // 修改规则
   modifyPacItem(data, rowIndex, groupIndex) {
+    console.log(data, rowIndex, groupIndex)
     this.setState({ modifyData: Object.assign(data, { rowIndex, groupIndex }) }, () => {
       this.pacModalRef.current.show()
     })
   }
 
   // 删除规则
-  deletePacItem() {
+  deletePacItem(data, rowIndex, groupIndex) {
+    const { pacList } = this.state
+    if (typeof groupIndex === 'number') {
+      const listArr = pacList[groupIndex].list
+      listArr.splice(rowIndex, 1)
+      pacList[groupIndex].list = listArr
+    } else {
+      pacList.splice(rowIndex, 1)
+    }
 
+    this.setState({ pacList }, () => $api.setPacList(this.state.pacList))
   }
 
   //  新增/修改 回调
@@ -172,14 +182,13 @@ export default class pac extends React.Component {
     })
 
     $api.setPacList(pacList)
-
   }
 
   /**
    * 设置 host
-   * @param {Array} newValue 
-   * @param {Number} rowIndex 
-   * @param {Number} groupIndex 
+   * @param {Array} newValue
+   * @param {Number} rowIndex
+   * @param {Number} groupIndex
    */
   setPacHosts(newValue, rowIndex, groupIndex) {
     const { pacList } = this.state
@@ -192,7 +201,7 @@ export default class pac extends React.Component {
         return { host: host, active: newValue === 'all' ? true : newValue.includes(host) }
       })
     }
-    this.setState({ pacList })
+    this.setState({ pacList }, () => $api.setPacList(this.state.pacList))
   }
 
 } // class pac end
