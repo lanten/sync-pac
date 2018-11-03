@@ -159,7 +159,7 @@ export default class pac extends React.Component {
       pacList.splice(rowIndex, 1)
     }
 
-    this.setState({ pacList }, () => $api.setPacList(this.state.pacList))
+    $api.setPacList(pacList).then(() => this.setState({ pacList }))
   }
 
   //  新增/修改 回调
@@ -177,11 +177,12 @@ export default class pac extends React.Component {
       }
     }
 
-    this.setState({ pacList }, () => {
-      this.pacModalRef.current.hide()
-    })
 
-    $api.setPacList(pacList)
+    $api.setPacList(pacList).then(() => {
+      this.setState({ pacList }, () => {
+        this.pacModalRef.current.hide()
+      })
+    })
   }
 
   /**
@@ -201,7 +202,7 @@ export default class pac extends React.Component {
         return { host: host, active: newValue === 'all' ? true : newValue.includes(host) }
       })
     }
-    this.setState({ pacList }, () => $api.setPacList(this.state.pacList))
+    $api.setPacList(pacList).then(() => this.setState({ pacList }))
   }
 
 } // class pac end
