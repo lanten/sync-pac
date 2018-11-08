@@ -195,6 +195,7 @@ function parsePacItemToString({ domain, hosts }) {
 
 
 module.exports = {
+  app,
   createWindow, windowList,
   readFile, getConfig, setConfig,
 
