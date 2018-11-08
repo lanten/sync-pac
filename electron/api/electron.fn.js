@@ -6,7 +6,7 @@ const { app } = require('electron')
 const { createWindow, windowList } = require('../window/createWindow')
 
 /**
- * 获取全局配置
+ * 获取全局用户设置
  * @returns {Object} config
  */
 function getConfig() {
@@ -27,7 +27,7 @@ function getConfig() {
 }
 
 /**
- * 写入全局配置
+ * 写入全局用户设置
  * @param {Object} config 
  */
 function setConfig(config) {
@@ -35,7 +35,7 @@ function setConfig(config) {
   const defaultConfig = getConfig()
   try {
     const configStr = JSON.stringify(Object.assign({}, defaultConfig, config))
-    return writeFile(configPath, configStr)
+    return writeFileSync(configPath, configStr, 'utf-8')
   } catch (error) {
     throw new Error(error)
   }

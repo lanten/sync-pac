@@ -40,6 +40,11 @@ function createWindow(key, options = {}) {
     return win
   }
 
+  // 没有配置 pac 路径
+  if (!global.userConfig.userRulePath && key !== 'setting') {
+    return createWindow('setting')
+  }
+
   const { url, config } = getWindowUrl(key)
 
   const defaultOptions = {
@@ -52,7 +57,7 @@ function createWindow(key, options = {}) {
     // skipTaskbar: false, // 是否在任务栏中隐藏窗口
     // backgroundColor: '#fff',
     // transparent: true, // 窗口是否透明
-    // titleBarStyle: 'hidden',
+    // titleBarStyle: 'default',
     vibrancy: 'appearance-based',
     ...config
   }

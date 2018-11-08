@@ -3,14 +3,18 @@ const { app, BrowserWindow } = require('electron')
 const { creatTray } = require('./tray')
 const { createWindow } = require('./window')
 
+const { NODE_ENV } = process.env
+
+// 主进程 API
 global.api = require('./api')
 
-const { NODE_ENV } = process.env
+// 载入用户设置
+global.userConfig = global.api.getConfig()
+
 
 let tray
 
 if (NODE_ENV === 'development') {
-
   // react-developer-tools
   require('electron-debug')({ showDevTools: false })
   app.on('ready', () => {
@@ -22,19 +26,21 @@ if (NODE_ENV === 'development') {
   })
 }
 
-// 在  macOS dock 中隐藏
+// 在 macOS dock 中隐藏
 // app.dock.hide()
-
 
 app.on('ready', () => {
   tray = creatTray()
   createWindow('pac')
 })
 
-app.on('window-all-closed', e => {
-  // e.preventDefault()
-})
+// app.on('window-all-closed', e => {
+//   // e.preventDefault()
+// })
 
-app.on('quit', e => {
-  tray.destroy()
+app.on('before-quit', () => {
+  // 只在 win 系统下销毁托盘图标
+  if (process.platform === 'win32') {
+    tray.destroy()
+  }
 })

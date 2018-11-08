@@ -40,7 +40,7 @@
     "cross-env": "^5.2.0",
     "css-hot-loader": "^1.4.1",
     "css-loader": "^1.0.0",
-    "electron": "^2.0.7",
+    "electron": "2.0.7",
     "electron-debug": "^2.0.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-packager": "^12.1.2",
