@@ -10,7 +10,7 @@ const trayMenus = [
   { type: 'separator' },
 
   { label: 'PAC 列表', id: 'pac-list' },
-  { label: '设置', click: () => createWindow('setting') },
+  { label: '设置', click: () => createWindow('settingPath') },
 
   { type: 'separator' },
 

@@ -10,7 +10,7 @@ const { NODE_ENV } = process.env
 const windowList = {}
 
 // 不需要跳转设置的页面
-const winKeyFilter = ['setting', 'about']
+const winKeyFilter = ['settingPath', 'about']
 
 /**
  * 
@@ -43,9 +43,9 @@ function createWindow(key, options = {}) {
     return win
   }
 
-  // 没有配置 pac 路径
+  // 没有配置路径
   if (!global.userConfig.userRulePath && !winKeyFilter.includes(key)) {
-    return createWindow('setting')
+    return createWindow('settingPath')
   }
 
   const { url, config } = getWindowUrl(key)

@@ -35,7 +35,7 @@ function setConfig(config) {
   const defaultConfig = getConfig()
   try {
     const configStr = JSON.stringify(Object.assign({}, defaultConfig, config))
-    return writeFileSync(configPath, configStr, 'utf-8')
+    return fs.writeFileSync(configPath, configStr, 'utf-8')
   } catch (error) {
     throw new Error(error)
   }
@@ -197,7 +197,7 @@ function parsePacItemToString({ domain, hosts }) {
 module.exports = {
   app,
   createWindow, windowList,
-  readFile, getConfig, setConfig,
+  readFile, getConfig, setConfig, getUserRulePath,
 
   getPacList, setPacList, parsePacList, parsePacListToString, parsePacItemToString,
 }

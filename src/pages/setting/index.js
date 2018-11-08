@@ -6,10 +6,10 @@ export default {
   path: '/setting',
   component: () => <Router routes={[
     {
-      exact: true,
-      path: '/setting/',
-      params: { config: 'home' },
-      component: AsyncImport(() => import('./setting')),
+      // exact: true,
+      path: '/setting/path',
+      params: { config: 'path' },
+      component: AsyncImport(() => import('./setting-path')),
     },
   ]} />,
 }

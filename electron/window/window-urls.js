@@ -4,11 +4,12 @@ const urls = {
   home: '/',
 
   pac: { url: '/pac', config: { title: 'pac-sync', minWidth: 600, minHeight: 400 } },
-  setting: {
-    url: '/setting',
+
+  settingPath: {
+    url: '/setting/path',
     config: {
-      title: '设置',
-      width: 600, height: 400,
+      title: '路径设置',
+      width: 600, height: 160,
       ...fixedConfig,
     }
   },

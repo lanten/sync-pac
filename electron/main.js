@@ -34,9 +34,9 @@ app.on('ready', () => {
   createWindow('pac')
 })
 
-// app.on('window-all-closed', e => {
-//   // e.preventDefault()
-// })
+app.on('window-all-closed', e => {
+  // e.preventDefault()
+})
 
 app.on('before-quit', () => {
   // 只在 win 系统下销毁托盘图标
