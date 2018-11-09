@@ -4,7 +4,7 @@ const gistsApis = {
   getGist: '/gists',
 }
 
-function request(key, params = {}, options = {}) {
+function request(url, params = {}, options = {}) {
   const {
     method = 'GET',
     baseURL = 'https://api.github.com',
@@ -13,14 +13,14 @@ function request(key, params = {}, options = {}) {
     from = '' // 来源页
   } = options
 
+  const { token } = global.$api.getConfig()
+
+  // const keys = key.split('/')
+  // let url = gistsApis[keys.shift()]
+  // let urlParams = keys.join('/')
 
 
-  const keys = key.split('/')
-  let url = gistsApis[keys.shift()]
-  let urlParams = keys.join('/')
-
-
-  if (urlParams) url += '/' + urlParams
+  // if (urlParams) url += '/' + urlParams
 
   const requestHead = {
     method,
@@ -30,17 +30,10 @@ function request(key, params = {}, options = {}) {
   }
 
 
-  if (method === 'GET') {
-    const getParams = Object.keys(params).map(k => {
-      return `${k}=${params[k]}`
-    })
-    if (getParams.length) url += `?${getParams.join('&')}`
-  } else {
+  if (method === 'POST') {
     requestHead.body = JSON.stringify(params)
   }
 
-
-  const { token } = global.$api.getConfig()
   if (token) {
     requestHead.headers.Authorization = `token ${token}`
   } else {
@@ -53,7 +46,15 @@ function request(key, params = {}, options = {}) {
 
 }
 
+function getGistData(gistId) {
+  if (!gistId) gistId = global.$api.getConfig().gistId
+
+  return request('/gists/' + gistId)
+
+}
+
 module.exports = {
   gistsApis,
   request,
+  getGistData,
 }

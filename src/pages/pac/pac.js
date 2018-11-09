@@ -32,7 +32,7 @@ export default class pac extends React.Component {
 
   componentDidMount() {
 
-    $api.request('getGist/5808e3011d41a4acb55ecd3c92d69696').then(res => {
+    $api.getGistData('5808e3011d41a4acb55ecd3c92d69696').then(res => {
       console.log('123123123', res)
     }).catch(err => {
       console.log('22222', err)
