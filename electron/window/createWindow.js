@@ -44,7 +44,7 @@ function createWindow(key, options = {}) {
   }
 
   // 没有配置路径
-  if (!global.userConfig.userRulePath && !winKeyFilter.includes(key)) {
+  if (!global.$api.getConfig() && !winKeyFilter.includes(key)) {
     return createWindow('settingPath', { from: key })
   }
 

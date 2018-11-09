@@ -21,7 +21,7 @@ export default class pac extends React.Component {
           name: 'default',
           path: '',
           action(e, itemData) {
-            console.log(e, itemData)
+            console.log(e, itemData, $api.getConfig())
           }
         }
       ],

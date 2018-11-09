@@ -9,6 +9,8 @@ function request(key, params = {}, options = {}) {
     method = 'GET',
     baseURL = 'https://api.github.com',
     Accept = 'application/vnd.github.v3+json',
+    needAuth = false, // 需要认证
+    from = '' // 来源页
   } = options
 
 
@@ -38,12 +40,12 @@ function request(key, params = {}, options = {}) {
   }
 
 
-  // const { token = '' } = global.userConfig
-  // if (token) {
-  //   requestHead.headers.Authorization = `token ${token}`
-  // } else {
-
-  // }
+  const { token } = global.$api.getConfig()
+  if (token) {
+    requestHead.headers.Authorization = `token ${token}`
+  } else {
+    if (needAuth) global.$api.createWindow('setting', { from })
+  }
 
   console.log(url, requestHead)
 

@@ -194,11 +194,12 @@ function parsePacItemToString({ domain, hosts }) {
   return resStr
 }
 
-
-module.exports = {
+const $api = {
   app,
   createWindow, windowList,
   readFile, getConfig, setConfig, getUserRulePath,
 
   getPacList, setPacList, parsePacList, parsePacListToString, parsePacItemToString,
 }
+
+module.exports = $api

@@ -6,14 +6,8 @@ const { createWindow } = require('./window')
 const { NODE_ENV } = process.env
 
 // 主进程 API
-global.api = require('./api')
+global.$api = require('./api')
 
-// 载入用户设置
-Object.defineProperty(global, 'userConfig', {
-  get() {
-    return global.api.getConfig()
-  }
-})
 
 let tray
 
