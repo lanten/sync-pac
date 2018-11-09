@@ -9,8 +9,11 @@ const { NODE_ENV } = process.env
 global.api = require('./api')
 
 // 载入用户设置
-global.userConfig = global.api.getConfig()
-
+Object.defineProperty(global, 'userConfig', {
+  get() {
+    return global.api.getConfig()
+  }
+})
 
 let tray
 

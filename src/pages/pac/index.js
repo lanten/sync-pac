@@ -8,7 +8,7 @@ export default {
     {
       exact: true,
       path: '/pac/',
-      params: { config: 'home' },
+      params: { key: 'pac' },
       component: AsyncImport(() => import('./pac')),
     },
   ]} />,

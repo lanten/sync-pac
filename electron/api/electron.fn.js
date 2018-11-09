@@ -78,9 +78,10 @@ function writeFile(path, data) {
 
 /**
  * 获取用户规则路径
+ * @param {Boolean} setConfig default:true
  * @returns {Promise}
  */
-function getUserRulePath() {
+function getUserRulePath(setConfig) {
   return new Promise((resolve, reject) => {
     let path = getConfig().userRulePath
 
@@ -89,7 +90,7 @@ function getUserRulePath() {
     if (process.platform === 'darwin') path = `${app.getPath('home')}/.ShadowsocksX-NG/user-rule.txt`
 
     if (path && fs.existsSync(path)) {
-      setConfig({ userRulePath: path })
+      if (setConfig) setConfig({ userRulePath: path })
       resolve(path)
     } else {
       reject()

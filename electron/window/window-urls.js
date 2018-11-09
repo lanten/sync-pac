@@ -9,7 +9,7 @@ const urls = {
     url: '/setting/path',
     config: {
       title: '路径设置',
-      width: 600, height: 160,
+      width: 560, height: 160,
       ...fixedConfig,
     }
   },

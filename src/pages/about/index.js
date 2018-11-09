@@ -8,7 +8,7 @@ export default {
     {
       exact: true,
       path: '/about/',
-      params: { config: 'home' },
+      params: { key: 'about' },
       component: AsyncImport(() => import('./about')),
     },
   ]} />,

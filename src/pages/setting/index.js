@@ -8,7 +8,7 @@ export default {
     {
       // exact: true,
       path: '/setting/path',
-      params: { config: 'path' },
+      params: { key: 'settingPath' },
       component: AsyncImport(() => import('./setting-path')),
     },
   ]} />,

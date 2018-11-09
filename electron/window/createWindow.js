@@ -45,10 +45,16 @@ function createWindow(key, options = {}) {
 
   // 没有配置路径
   if (!global.userConfig.userRulePath && !winKeyFilter.includes(key)) {
-    return createWindow('settingPath')
+    return createWindow('settingPath', { from: key })
   }
 
   const { url, config } = getWindowUrl(key)
+
+  let from
+  if (options.from) {
+    from = options.from
+    delete options.from
+  }
 
   const defaultOptions = {
     icon: appIcon,
@@ -65,7 +71,7 @@ function createWindow(key, options = {}) {
     ...config
   }
   win = new BrowserWindow(Object.assign(defaultOptions, options))
-  // console.log(win.webContents.location)
+  if (from) win.from = from
   windowList[key] = win
   win.loadURL(url)
   win.once('ready-to-show', () => {
