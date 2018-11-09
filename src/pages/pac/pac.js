@@ -31,6 +31,15 @@ export default class pac extends React.Component {
   }
 
   componentDidMount() {
+
+    $api.request('getGist/5808e3011d41a4acb55ecd3c92d69696').then(res => {
+      console.log('123123123', res)
+    }).catch(err => {
+      console.log('22222', err)
+    })
+
+    // console.log(a)
+
     console.log($api)
     $api.getPacList().then(pacList => {
       this.setState({ pacList })
@@ -71,7 +80,7 @@ export default class pac extends React.Component {
               this.setState({ pacList: this.state.pacList })
             }}></Button>
             <Button shape="circle" size="small" icon="edit" onClick={() => this.modifyPacItem(...arguments)}></Button>
-            <Popconfirm title="Are you sure delete this rule ?" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)} okText="Yes" cancelText="No">
+            <Popconfirm title="确定删除本条规则吗?" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)} okText="是" cancelText="否">
               <Button shape="circle" size="small" icon="delete" type="danger" ghost></Button>
             </Popconfirm>
           </div>
