@@ -38,7 +38,7 @@ function request(key, params = {}, options = {}) {
   }
 
 
-  // const { token = '143642c3bea79c62d5a8f429680fba80a188d03e' } = global.userConfig
+  // const { token = '' } = global.userConfig
   // if (token) {
   //   requestHead.headers.Authorization = `token ${token}`
   // } else {
