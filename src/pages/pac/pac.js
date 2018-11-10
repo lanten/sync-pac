@@ -5,7 +5,7 @@ import {
   Checkbox, Popconfirm,
 } from 'antd'
 
-import { SiderMenu } from '../../components'
+import { SideMenu } from '../../components'
 import PacModal from './components/PacModal'
 import './pac.less'
 
@@ -16,7 +16,7 @@ export default class pac extends React.Component {
     this.state = {
       pacList: [],
       modifyData: {},
-      siderMenus: [
+      sideMenus: [
         {
           name: 'default',
           path: '',
@@ -115,12 +115,12 @@ export default class pac extends React.Component {
 
   // 
   render() {
-    const { pacList = [], siderMenus, modifyData } = this.state
+    const { pacList = [], sideMenus, modifyData } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
-        <div className="sider-panel">
-          <SiderMenu menus={siderMenus} />
+        <div className="side-panel">
+          <SideMenu menus={sideMenus} />
           <Button ghost className="add-btn" type="dashed" icon="plus">添加副本</Button>
         </div>
 

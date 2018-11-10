@@ -1,9 +1,9 @@
 import React from 'react'
 import { Menu, Icon } from 'antd'
 
-import './SiderMenu.less'
+import './SideMenu.less'
 
-export default class SiderMenu extends React.Component {
+export default class SideMenu extends React.Component {
   constructor(props) {
     super(props)
 
@@ -18,7 +18,7 @@ export default class SiderMenu extends React.Component {
     const { menus } = this.props
     return (
       <Menu
-        className="sider-menu"
+        className="side-menu"
         mode="inline"
         defaultSelectedKeys={['0']}
         ref={this.menuRef}
@@ -32,4 +32,4 @@ export default class SiderMenu extends React.Component {
     )
   }
 
-} // class SiderMenu end
+} // class SideMenu end
