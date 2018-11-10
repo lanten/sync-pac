@@ -10,4 +10,6 @@ global.$root.ondragover = () => false
 global.$root.ondragleave = global.$root.ondragend = () => false
 global.$root.ondrop = () => false
 
+global.$root.className = process.platform === 'darwin' ? 'macos' : 'windows'
+
 reactDom.render(<App />, global.$root)

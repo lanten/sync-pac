@@ -7,6 +7,10 @@ body {
 #root {
   border-radius: 6px;
   height: 100%;
+  background-color: @color_background;
+  &.macos {
+    background-color: transparent !important;
+  }
   .container {
     background-color: fade(#fafafa, 45);
     &.padding {
@@ -22,6 +26,14 @@ body {
       overflow-y: auto;
     }
   }
+}
+
+.full-y{
+  height: 100%;
+}
+
+.full-x{
+  width: 100%;
 }
 
 .loopFontSize (@count)when(@count > 9) {

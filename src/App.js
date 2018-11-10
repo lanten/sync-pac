@@ -12,7 +12,7 @@ export default class App extends React.Component {
     return (
       <React.Fragment>
         {/* <Header></Header> */}
-        <div className="flex-1 flex column">
+        <div className="flex-1 flex column full-y">
           <Router routes={routes} />
         </div>
       </React.Fragment>
