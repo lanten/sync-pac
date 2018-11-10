@@ -49,7 +49,7 @@ export default class SettingPath extends React.Component {
               enterButton={<Button type="primary" disabled={inputState === 'error'}>确认</Button>}
               placeholder="用户规则 user-rule.text 文件路径"
               value={path}
-              onInput={({ target: { value } }) => this.inputPath(value)}
+              onChange={({ target: { value } }) => this.inputPath(value)}
               onSearch={() => this.saveSetting()}
             />
           </Form.Item>

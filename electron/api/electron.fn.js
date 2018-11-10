@@ -5,6 +5,9 @@ const { app } = require('electron')
 
 const { createWindow, windowList } = require('../window/createWindow')
 
+// 不同系统中的换行符
+const BREAK = process.platform === 'win32' ? '\r\n' : '\n'
+
 /**
  * 获取全局用户设置
  * @returns {Object} config
@@ -141,7 +144,8 @@ function parsePacList(data, hasGroup = true) {
   str.replace(REG_RULE, (res, active, $1 = '', $2 = '', $3 = '') => {
     const domain = `${$2}${$3}`
     const host = $1 ? $1.replace('.', '') : '@'
-    if (obj[domain]) {
+
+    if (obj.hasOwnProperty(domain)) {
       const hostsArr = arr[obj[domain]].hosts
       const hostIndex = hostsArr.findIndex(val => host === val.host)
       // 相同域名下重复的 host 将会被忽略
@@ -158,6 +162,7 @@ function parsePacList(data, hasGroup = true) {
   return arr
 }
 
+
 /**
  * 将 pac 列表转换成字符串
  * @param {Array} listData 
@@ -169,17 +174,14 @@ function parsePacListToString(listData) {
     const { group, name, list } = val
     let itemStr = ''
     if (group) {
-      itemStr = `\n! ## [${name}-start]\n${list.map(parsePacItemToString).join('')}! ## [${name}-end]\n\n`
+      itemStr = `${BREAK}! ## [${name}-start]${BREAK}${list.map(parsePacItemToString).join('')}! ## [${name}-end]${BREAK}${BREAK}`
     } else {
       itemStr = parsePacItemToString(val)
     }
     resStr += itemStr
   })
 
-  return `
-    ${memoStr}
-    ${resStr}
-  `
+  return `${memoStr}${BREAK}${resStr}`
 }
 
 /**
@@ -189,7 +191,7 @@ function parsePacListToString(listData) {
 function parsePacItemToString({ domain, hosts }) {
   let resStr = ''
   hosts.forEach(({ host, active }) => {
-    resStr += `${active ? '' : '! '}||${host === '@' ? '' : host + '.'}${domain}^\n`
+    resStr += `${active ? ' ' : '! '}||${host === '@' ? '' : host + '.'}${domain}^${BREAK}`
   })
   return resStr
 }

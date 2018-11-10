@@ -7,14 +7,14 @@ const defaultMenus = require('../menus/tray-menus')
 
 
 function creatTray({ menus = defaultMenus, title = appName, icon } = {}) {
-  const iconPath = systemPreferences.isDarkMode() ? trayIconLight : trayIconDark
+  const iconPath = process.platform === 'darwin' ? systemPreferences.isDarkMode() ? trayIconLight : trayIconDark : trayIconLight
   let image = nativeImage.createFromPath(iconPath)
   image.setTemplateImage(true)
   let tray = new Tray(image)
   tray.setToolTip(title)
   tray.setContextMenu(Menu.buildFromTemplate(menus))
   tray.on('double-click', () => {
-    createWindow('home')
+    createWindow('pac')
   })
 
   return tray

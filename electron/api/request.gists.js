@@ -40,8 +40,6 @@ function request(url, params = {}, options = {}) {
     if (needAuth) global.$api.createWindow('setting', { from })
   }
 
-  console.log(url, requestHead)
-
   return fetch(`${baseURL}${url}`, requestHead).then(res => res.json())
 
 }
