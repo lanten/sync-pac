@@ -13,7 +13,7 @@ const windowList = {}
 const winKeyFilter = ['settingPath', 'about']
 
 /**
- * 
+ * 通过 window-urls.js 中的 key 得到 url
  * @param {String} urlKey 
  */
 function getWindowUrl(key) {
@@ -31,7 +31,7 @@ function getWindowUrl(key) {
 }
 
 /**
- * 
+ * 创建一个子窗口
  * @param {String} urlKey
  * @param {Object} BrowserWindowOptions 
  */
