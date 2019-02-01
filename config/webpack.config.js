@@ -111,7 +111,7 @@ if (NODE_ENV === 'development') {
     new UglifyJsPlugin({
       uglifyOptions: {
         compress: {
-          // pure_funcs: ['console.log'], // 删除console.log, 保留 info ，warn，error 等
+          pure_funcs: ['console.log'], // 删除console.log, 保留 info ，warn，error 等
         },
       }
     }),

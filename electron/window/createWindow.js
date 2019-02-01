@@ -50,6 +50,8 @@ function createWindow(key, options = {}) {
 
   const { url, config } = getWindowUrl(key)
 
+  console.log(url)
+
   let from
   if (options.from) {
     from = options.from

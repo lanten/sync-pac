@@ -10,7 +10,7 @@ import webpackHotMiddleware from 'webpack-hot-middleware'
 import { port, source } from '../config/dev.config'
 
 process.env.NODE_ENV = 'development'
-const webpackConfig = require('./webpack.config')
+const webpackConfig = require('../config/webpack.config')
 
 let electronProcess = null
 let manualRestart = false
@@ -20,19 +20,19 @@ function startRenderer() {
   return new Promise((resolve, reject) => {
 
     webpackConfig.devtool = 'source-map'
-    const hotclient = ['webpack-hot-middleware/client?noInfo=true&reload=true']
+    const hotClient = ['webpack-hot-middleware/client?noInfo=true&reload=true']
 
     if (typeof webpackConfig.entry == 'object') {
       Object.keys(webpackConfig.entry).forEach((name) => {
         const value = webpackConfig.entry[name]
         if (Array.isArray(value)) {
-          value.unshift(...hotclient)
+          value.unshift(...hotClient)
         } else {
-          webpackConfig.entry[name] = [...hotclient, value]
+          webpackConfig.entry[name] = [...hotClient, value]
         }
       })
     } else {
-      webpackConfig.entry = [...hotclient, webpackConfig.entry]
+      webpackConfig.entry = [...hotClient, webpackConfig.entry]
     }
 
     const webpackCompiler = webpack(webpackConfig)

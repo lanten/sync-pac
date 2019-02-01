@@ -8,4 +8,4 @@ const routes = [
   about,
 ]
 
-module.exports = routes
+export default routes

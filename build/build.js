@@ -3,7 +3,7 @@ const path = require('path')
 const packager = require('electron-packager')
 
 const { default: buildCommon } = require('./build-common')
-const webpackConfig = require('./webpack.config')
+const webpackConfig = require('../config/webpack.config')
 const packageConfig = require('../config/package.config')
 
 const { clearDir } = require('./utils')

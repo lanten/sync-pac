@@ -10,7 +10,7 @@ export default class Card extends React.Component {
     return (
       <div>
         Card is ok
-        {...children}
+        {children}
       </div>
     )
   }

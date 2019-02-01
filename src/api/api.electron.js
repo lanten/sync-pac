@@ -1,3 +1,3 @@
 import { remote } from 'electron'
 
-module.exports = remote.getGlobal('$api')
+export default remote.getGlobal('$api')
