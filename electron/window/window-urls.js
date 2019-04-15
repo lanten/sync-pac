@@ -6,10 +6,10 @@ const urls = {
   pac: { url: '/pac', config: { title: 'pac-sync', minWidth: 600, minHeight: 400 } },
 
   settingPath: {
-    url: '/setting/path',
+    url: '/setting',
     config: {
-      title: '路径设置',
-      width: 560, height: 150,
+      title: '设置',
+      width: 560, height: 350,
       ...fixedConfig,
     }
   },

@@ -7,9 +7,9 @@ export default {
   component: () => <Router routes={[
     {
       // exact: true,
-      path: '/setting/path',
-      params: { key: 'settingPath' },
-      component: AsyncImport(() => import('./setting-path')),
+      path: '/setting',
+      params: { key: 'setting' },
+      component: AsyncImport(() => import('./setting')),
     },
   ]} />,
 }
