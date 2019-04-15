@@ -10,7 +10,7 @@ const { NODE_ENV } = process.env
 const windowList = {}
 
 // 不需要跳转设置的页面
-const winKeyFilter = ['settingPath', 'about']
+const winKeyFilter = ['setting', 'about']
 
 /**
  * 通过 window-urls.js 中的 key 得到 url
@@ -45,12 +45,10 @@ function createWindow(key, options = {}) {
 
   // 没有配置路径
   if (!global.$api.getConfig().userRulePath && !winKeyFilter.includes(key)) {
-    return createWindow('settingPath', { from: key })
+    return createWindow('setting', { from: key, disableClose: true })
   }
 
   const { url, config } = getWindowUrl(key)
-
-  console.log(url)
 
   let from
   if (options.from) {
@@ -78,7 +76,7 @@ function createWindow(key, options = {}) {
   win.loadURL(url)
   win.once('ready-to-show', () => {
     win.show()
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools()
   })
 
   win.on('close', e => {

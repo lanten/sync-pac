@@ -28,11 +28,11 @@ body {
   }
 }
 
-.full-y{
+.full-y {
   height: 100%;
 }
 
-.full-x{
+.full-x {
   width: 100%;
 }
 
@@ -55,4 +55,19 @@ body {
     }
   }
   );
+}
+
+.app-footer {
+  background-color: rgba(@color_light, 0.3);
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 @p;
+  button {
+    margin-right: @p/2;
+    &:last-child{
+      margin-right: 0;
+    }
+  }
 }
