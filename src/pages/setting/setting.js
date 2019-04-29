@@ -111,7 +111,7 @@ export default class SettingPath extends React.Component {
     const { path, token, gistId } = this.state
     $api.setConfig({ userRulePath: path, token, gistId })
 
-    if (this.win.from) $api.createWindow(win.from)
+    if (this.win.from) $api.createWindow(this.win.from)
     this.win.close()
   }
 

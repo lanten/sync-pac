@@ -3,23 +3,30 @@
 </div>
 
 > 完成度 0.1%
+
 ## 这是什么玩意儿？
+
 基于 electron 实现的 shadowsocks 用户PAC规则管理工具
 
 ## 平台支持
+
 - windows 7
 - mac os 10.8
 
 ## Quick start
+
 ```bash
-npm start
+npm i
 ```
-or
-```
+
+and
+
+```bash
 npm run dev
 ```
 
 ## Overview
+
 - webpack 4
 - electron
 - electron-package
@@ -43,12 +50,14 @@ Modify [package.config.js](./config/package.config.js) to edit package info.
 For a full list of options see: https://github.com/electron-userland/electron-packager/blob/master/docs/api.md.
 
 Create a package for OSX, Windows and Linux
+
 ```
 npm run pack
 ```
 
 Or target a specific platform
-```
+
+```bash
 npm run pack:mac
 npm run pack:win
 npm run pack:linux
