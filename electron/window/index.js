@@ -1,8 +1,7 @@
-const { createWindow, getWindowUrl } = require('./createWindow')
+const createWindow = require('./createWindow')
 const urls = require('./window-urls')
 
 module.exports = {
-  getWindowUrl,
-  createWindow,
+  ...createWindow,
   urls
 }

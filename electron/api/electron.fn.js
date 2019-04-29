@@ -3,7 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const { app } = require('electron')
 
-const { createWindow, windowList } = require('../window/createWindow')
+const { createWindow, windowList } = require('../window')
 
 // 不同系统中的换行符
 const BREAK = process.platform === 'win32' ? '\r\n' : '\n'

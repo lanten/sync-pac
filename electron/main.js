@@ -1,5 +1,4 @@
-const path = require('path')
-const { app, BrowserWindow } = require('electron')
+const { app } = require('electron')
 const { creatTray } = require('./tray')
 const { createWindow } = require('./window')
 

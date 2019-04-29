@@ -1,5 +1,5 @@
 const path = require('path')
-const { app, BrowserWindow } = require('electron')
+const { BrowserWindow } = require('electron')
 const { appIcon } = require('../../config/app.config')
 const { port } = require('../../config/dev.config')
 
@@ -76,7 +76,7 @@ function createWindow(key, options = {}) {
   win.loadURL(url)
   win.once('ready-to-show', () => {
     win.show()
-    // win.webContents.openDevTools()
+    win.webContents.openDevTools()
   })
 
   win.on('close', e => {
@@ -86,6 +86,16 @@ function createWindow(key, options = {}) {
   return win
 }
 
+// dark mode
+// if (process.platform == 'darwin') {
+//   function setOSTheme() {
+//     let theme = systemPreferences.isDarkMode() ? 'dark' : 'light'
+//     setConfig({ theme })
+//     console.log(theme)
+//   }
+
+//   systemPreferences.subscribeNotification('AppleInterfaceThemeChangedNotification', setOSTheme)
+// }
 
 module.exports = {
   createWindow,

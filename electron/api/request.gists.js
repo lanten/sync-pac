@@ -1,4 +1,5 @@
 const fetch = require('node-fetch')
+const { gistDescription } = require('../../config/app.config')
 
 const gistsApis = {
   getGist: '/gists',
@@ -40,19 +41,74 @@ function request(url, params = {}, options = {}) {
     if (needAuth) global.$api.createWindow('setting', { from })
   }
 
-  return fetch(`${baseURL}${url}`, requestHead).then(res => res.json())
+  return fetch(`${baseURL}${url}`, requestHead).then(async res => {
+    const json = await res.json()
+    if (json.message) {
+      return Promise.reject(json, res)
+    } else {
+      return json
+    }
+  }).catch((err, res) => {
+    console.error(err, res)
+    return Promise.reject(err, res)
+  })
 
 }
 
+// 获取 gist
 function getGistData(gistId) {
   if (!gistId) gistId = global.$api.getConfig().gistId
 
   return request('/gists/' + gistId)
+}
+
+//  获取全部 gist
+function getGistList() {
+  return request('/gists')
+}
+
+// 创建 gist
+function createGist(sendData) {
+  return request('/gists', sendData, { method: 'POST' })
+}
+
+function initPacGist() {
+  return new Promise(async (resolve, reject) => {
+    let { gistId } = global.$api.getConfig()
+    let gistData
+    if (gistId) {
+      gistData = await $api.getGistData(gistId).catch(() => undefined)
+    } else {
+      gistData = await $api.getGistList().then((res = {}) => {
+        if (res.message) {
+          message.error(res.message)
+        }
+        return res.find(v => v.description === gistDescription)
+      }).catch(() => false)
+
+      if (!gistData) {
+        console.log('创建')
+        gistData = await $api.createGist({
+          files: {
+            config: { content: `{createTime:${Date.now()}}` }
+          },
+          description: gistDescription,
+          public: true,
+        }).catch(() => undefined)
+      }
+    }
+    if (gistData) {
+      resolve(gistData)
+    } else {
+      reject()
+    }
+  })
 
 }
 
 module.exports = {
   gistsApis,
   request,
-  getGistData,
+
+  getGistList, getGistData, createGist, initPacGist,
 }

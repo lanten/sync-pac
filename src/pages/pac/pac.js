@@ -15,6 +15,7 @@ export default class pac extends React.Component {
 
     this.state = {
       pacList: [],
+      gitData: {},
       modifyData: {},
       sideMenus: [
         {
@@ -31,16 +32,16 @@ export default class pac extends React.Component {
   }
 
   componentDidMount() {
-
-    $api.getGistData('5808e3011d41a4acb55ecd3c92d69696').then(res => {
-      console.log('123123123', res)
-    }).catch(err => {
-      console.log('22222', err)
+    $api.initPacGist().then(res => {
+      console.log(res)
     })
 
-    // console.log(a)
+    // $api.getGistData('5808e3011d41a4acb55ecd3c92d69696').then(res => {
+    //   console.log('123123123', res)
+    // }).catch(err => {
+    //   console.log('22222', err)
+    // })
 
-    console.log($api)
     $api.getPacList().then(pacList => {
       this.setState({ pacList })
     }).catch(err => {
@@ -115,7 +116,7 @@ export default class pac extends React.Component {
 
   // 
   render() {
-    const { pacList = [], sideMenus, modifyData } = this.state
+    const { pacList = [], sideMenus, modifyData, loadingGist = false } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
@@ -129,7 +130,7 @@ export default class pac extends React.Component {
             <Button size="small" icon="plus" onClick={() => this.addPacItem()}></Button>
             <span className="flex-1"></span>
             <Button size="small" icon="share-alt"></Button>
-            <Button size="small" icon="sync"></Button>
+            <Button size="small" icon="sync" loading={loadingGist}></Button>
             {/* <Icon type="plus-circle" theme="twoTone" style={{ fontSize: 24 }}></Icon> */}
           </div>
           <div className="flex-1 container padding scroll-y pac-list">

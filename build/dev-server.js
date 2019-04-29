@@ -70,7 +70,7 @@ function startElectron() {
     electronLog(data, 'Electron', 'cyan')
   })
   electronProcess.stderr.on('data', data => {
-    electronLog(data, 'Electron', 'yellow')
+    electronLog(data, 'Electron', 'red')
   })
 
   electronProcess.on('close', () => {
