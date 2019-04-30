@@ -56,7 +56,7 @@ function request(url, params = {}, options = {}) {
 }
 
 // 获取 gist
-function getGistData(gistId) {
+function getGistDataByGistId(gistId) {
   if (!gistId) gistId = global.$api.getConfig().gistId
 
   return request('/gists/' + gistId)
@@ -72,14 +72,15 @@ function createGist(sendData) {
   return request('/gists', sendData, { method: 'POST' })
 }
 
-function initPacGist() {
+// 
+function getGistData() {
   return new Promise(async (resolve, reject) => {
     let { gistId } = global.$api.getConfig()
     let gistData
     if (gistId) {
-      gistData = await $api.getGistData(gistId).catch(() => undefined)
+      gistData = await getGistDataByGistId(gistId).catch(() => undefined)
     } else {
-      gistData = await $api.getGistList().then((res = {}) => {
+      gistData = await getGistList().then((res = {}) => {
         if (res.message) {
           message.error(res.message)
         }
@@ -88,9 +89,9 @@ function initPacGist() {
 
       if (!gistData) {
         console.log('创建')
-        gistData = await $api.createGist({
+        gistData = await createGist({
           files: {
-            config: { content: `{createTime:${Date.now()}}` }
+            'config.json': { content: JSON.stringify({ createTime: Date.now() }) }
           },
           description: gistDescription,
           public: true,
@@ -110,5 +111,5 @@ module.exports = {
   gistsApis,
   request,
 
-  getGistList, getGistData, createGist, initPacGist,
+  getGistList, getGistDataByGistId, createGist, getGistData,
 }

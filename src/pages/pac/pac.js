@@ -32,15 +32,7 @@ export default class pac extends React.Component {
   }
 
   componentDidMount() {
-    $api.initPacGist().then(res => {
-      console.log(res)
-    })
-
-    // $api.getGistData('5808e3011d41a4acb55ecd3c92d69696').then(res => {
-    //   console.log('123123123', res)
-    // }).catch(err => {
-    //   console.log('22222', err)
-    // })
+    this.getGistData()
 
     $api.getPacList().then(pacList => {
       this.setState({ pacList })
@@ -213,6 +205,15 @@ export default class pac extends React.Component {
       })
     }
     $api.setPacList(pacList).then(() => this.setState({ pacList }))
+  }
+
+  getGistData() {
+    this.setState({ loadingGist: true })
+    $api.getGistData().then(res => {
+      console.log(res)
+    }).finally(() => {
+      this.setState({ loadingGist: false })
+    })
   }
 
 } // class pac end
