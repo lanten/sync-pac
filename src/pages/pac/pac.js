@@ -114,7 +114,7 @@ export default class pac extends React.Component {
       <div className="flex-1 flex row page-pac">
         <div className="side-panel">
           <SideMenu menus={sideMenus} />
-          <Button ghost className="add-btn" type="dashed" icon="plus">添加副本</Button>
+          <Button ghost className="add-btn" type="dashed" icon="plus" onClick={() => alert('尚未开发。。。')} >添加副本</Button>
         </div>
 
         <div className="flex-1 flex column">

@@ -3,7 +3,7 @@ const fixedConfig = { resizable: false, maximizable: false, minimizable: false }
 const urls = {
   home: '/',
 
-  pac: { url: '/pac', config: { title: 'pac-sync', minWidth: 600, minHeight: 400 } },
+  pac: { url: '/pac', config: { title: 'sync-pac', minWidth: 600, minHeight: 400 } },
 
   setting: {
     url: '/setting',
