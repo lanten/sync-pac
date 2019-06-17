@@ -21,8 +21,8 @@ export default class SettingPath extends React.Component {
       token,
       inputTokenState: token ? 'success' : '',
       inputTokenMessage: <p>Token 是用于上传配置到 Gist 的秘钥 <a onClick={() => shell.openExternal('https://github.com/lanten/sync-pac/wiki/1.%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96-token')}>如何获取 Token</a></p>,
-      gistId: gistId ? 'success' : '',
-      inputGistIdState: '',
+      gistId,
+      inputGistIdState: gistId ? 'success' : '',
       inputGistIdMessage: <p>GistId 如果不填写,系统将自动创建 <a onClick={() => shell.openExternal('https://github.com/lanten/sync-pac/wiki/2.%E5%A6%82%E4%BD%95%E8%8E%B7%E5%8F%96-gistId')}>如何获取 GistId</a></p>,
     }
 

@@ -102,19 +102,37 @@ function getUserRulePath(setConfig) {
 }
 
 /**
+ * 获取用户规则源文件
+ * @returns {Promise} Array
+ */
+function getPacSource() {
+  return getUserRulePath().then(readFile)
+}
+
+/**
+ * 写入用户规则源文件
+ * @param {String} pacData
+ * @returns {Promise} Array
+ */
+function setPacSource(pacData) {
+  return getUserRulePath().then(p => writeFile(p, pacData))
+}
+
+/**
  * 获取 pac 列表
  * @returns {Promise} Array
  */
 function getPacList() {
-  return getUserRulePath().then(path => readFile(path).then(res => parsePacList(res)))
+  return getPacSource().then(parsePacList)
 }
 
 /**
  * 写入 pac 列表
+ * @param {String} data
  * @returns {Promise} Array
  */
 function setPacList(pacList) {
-  return getUserRulePath().then(path => writeFile(path, parsePacListToString(pacList)))
+  return setPacSource(parsePacListToString(pacList))
 }
 
 
@@ -201,6 +219,7 @@ const $api = {
   createWindow, windowList,
   readFile, getConfig, setConfig, getUserRulePath,
 
+  getPacSource, setPacSource,
   getPacList, setPacList, parsePacList, parsePacListToString, parsePacItemToString,
 }
 

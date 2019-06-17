@@ -1,8 +1,8 @@
 import React from 'react'
 
 import {
-  message, Button,
-  Checkbox, Popconfirm,
+  message, Button, Icon,
+  Checkbox, Popconfirm, Popover,
 } from 'antd'
 
 import { SideMenu } from '../../components'
@@ -32,7 +32,7 @@ export default class pac extends React.Component {
   }
 
   componentDidMount() {
-    this.getGistData()
+    // this.downloadPacData()
 
     $api.getPacList().then(pacList => {
       this.setState({ pacList })
@@ -73,7 +73,7 @@ export default class pac extends React.Component {
               this.setState({ pacList: this.state.pacList })
             }}></Button>
             <Button shape="circle" size="small" icon="edit" onClick={() => this.modifyPacItem(...arguments)}></Button>
-            <Popconfirm title="确定删除本条规则吗?" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)} okText="是" cancelText="否">
+            <Popconfirm title="确定删除本条规则吗?" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)}>
               <Button shape="circle" size="small" icon="delete" type="danger" ghost></Button>
             </Popconfirm>
           </div>
@@ -112,17 +112,28 @@ export default class pac extends React.Component {
 
     return (
       <div className="flex-1 flex row page-pac">
-        <div className="side-panel">
+        {/* <div className="side-panel">
           <SideMenu menus={sideMenus} />
-          <Button ghost className="add-btn" type="dashed" icon="plus" onClick={() => alert('尚未开发。。。')} >添加副本</Button>
-        </div>
+          <Button ghost className="add-btn" type="dashed" icon="plus" onClick={() => alert('开发中。。。')} >添加副本</Button>
+        </div> */}
 
         <div className="flex-1 flex column">
           <div className="flex row action-bar">
             <Button size="small" icon="plus" onClick={() => this.addPacItem()}></Button>
             <span className="flex-1"></span>
-            <Button size="small" icon="share-alt"></Button>
-            <Button size="small" icon="sync" loading={loadingGist}></Button>
+            <Popover placement="bottomRight" title="分享 GistId 给你的小伙伴" onConfirm={this.downloadPacData}>
+              <Button size="small" icon="share-alt"></Button>
+            </Popover>
+
+            <Popconfirm placement="bottomRight" title="下载,此操作将会覆盖本地数据" onConfirm={this.downloadPacData} icon={<Icon type="cloud-download" />}>
+              <Button size="small" icon="cloud-download"></Button>
+            </Popconfirm>
+
+            <Popconfirm placement="bottomRight" title="上传,此操作将会覆盖云端数据" onConfirm={this.uploadPacData} icon={<Icon type="cloud-upload" />}>
+              <Button size="small" icon="cloud-upload"></Button>
+            </Popconfirm>
+
+            <Button size="small" icon="cloud-sync" loading={loadingGist}></Button>
             {/* <Icon type="plus-circle" theme="twoTone" style={{ fontSize: 24 }}></Icon> */}
           </div>
           <div className="flex-1 container padding scroll-y pac-list">
@@ -207,13 +218,20 @@ export default class pac extends React.Component {
     $api.setPacList(pacList).then(() => this.setState({ pacList }))
   }
 
-  getGistData() {
+  // 下载云端数据
+  downloadPacData = () => {
     this.setState({ loadingGist: true })
     $api.getGistData().then(res => {
       console.log(res)
     }).finally(() => {
       this.setState({ loadingGist: false })
     })
+  }
+
+  // 上传到云端
+  uploadPacData = async () => {
+    const pacSource = await $api.getPacSource()
+    $api.uploadToGists(pacSource)
   }
 
 } // class pac end

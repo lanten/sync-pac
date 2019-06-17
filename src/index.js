@@ -1,5 +1,7 @@
 import React from 'react'
 import reactDom from 'react-dom'
+import { LocaleProvider } from 'antd'
+import zh_CN from 'antd/lib/locale-provider/zh_CN'
 
 import App from './App'
 
@@ -12,4 +14,4 @@ global.$root.ondrop = () => false
 
 global.$root.className = process.platform === 'darwin' ? 'macos' : 'windows'
 
-reactDom.render(<App />, global.$root)
+reactDom.render(<LocaleProvider locale={zh_CN}><App /></LocaleProvider>, global.$root)

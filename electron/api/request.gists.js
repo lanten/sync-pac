@@ -69,15 +69,37 @@ function getGistList() {
 
 // 创建 gist
 function createGist(sendData) {
-  return request('/gists', sendData, { method: 'POST' })
+  const DEFAULT_SAND_DATA = {
+    files: {
+      'config.json': {
+        content: JSON.stringify({
+          version: '1.0',
+          createTime: Date.now(),
+        })
+      }
+    },
+    description: gistDescription,
+    public: true, // 是否公开
+  }
+  return request('/gists', Object.assign(DEFAULT_SAND_DATA, sendData), { method: 'POST' }).then(res => {
+    if (res.id) {
+      console.warn('重置 gistId', res.id)
+      global.$api.setConfig({ gistId: res.id })
+    }
+    return res
+  })
 }
 
-// 
-function getGistData() {
+/**
+ * 获取云端数据
+ * @param {*} autoCreate 是否自动创建
+ */
+function getGistData(autoCreate) {
   return new Promise(async (resolve, reject) => {
     let { gistId } = global.$api.getConfig()
-    let gistData
+    let gistData, errorInfo = {}
     if (gistId) {
+      console.log(gistId)
       gistData = await getGistDataByGistId(gistId).catch(() => undefined)
     } else {
       gistData = await getGistList().then((res = {}) => {
@@ -88,28 +110,38 @@ function getGistData() {
       }).catch(() => false)
 
       if (!gistData) {
-        console.log('创建')
-        gistData = await createGist({
-          files: {
-            'config.json': { content: JSON.stringify({ createTime: Date.now() }) }
-          },
-          description: gistDescription,
-          public: true,
-        }).catch(() => undefined)
+        if (autoCreate) {
+          console.log('自动创建 gist')
+          gistData = await createGist().catch(() => undefined)
+        } else {
+          console.log('error')
+          errorInfo.errorCode = '101'
+          errorInfo.message = '未找到对应的 gist,是否自动创建?'
+        }
       }
     }
     if (gistData) {
+      if (!gistId) {
+        global.$api.setConfig({ gistId: gistData.id })
+      }
       resolve(gistData)
     } else {
-      reject()
+      reject(Object.assign(errorInfo, { gistData }))
     }
   })
+}
 
+/**
+ * 将本地规则同步到云端
+ * @param {*} pacData 
+ */
+function uploadToGists(pacData) {
+  console.log('upload ready', pacData)
 }
 
 module.exports = {
   gistsApis,
   request,
 
-  getGistList, getGistDataByGistId, createGist, getGistData,
+  getGistList, getGistDataByGistId, createGist, getGistData, uploadToGists,
 }
