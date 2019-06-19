@@ -1,6 +1,7 @@
-const { app } = require('electron')
+const { app, Menu } = require('electron')
 const { creatTray } = require('./tray')
 const { createWindow } = require('./window')
+const appMenus = require('./menus/app-menus')
 
 const { NODE_ENV } = process.env
 
@@ -27,6 +28,10 @@ if (NODE_ENV === 'development') {
 
 app.on('ready', () => {
   tray = creatTray()
+  // macOs 下注册常用菜单
+  if (process.platform === 'darwin') {
+    Menu.setApplicationMenu(Menu.buildFromTemplate(appMenus))
+  }
   createWindow('pac')
 })
 

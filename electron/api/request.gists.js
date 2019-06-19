@@ -111,7 +111,14 @@ function getGistData(autoCreate) {
         if (res.message) {
           errorInfo = err
         }
-        return res.find(v => v.description === gistDescription)
+        const pacGist = res.find(v => v.description === gistDescription)
+        if (!pacGist || !pacGist.id) return void 0
+        return getGistDataByGistId(gistId).catch((err) => {
+          errorInfo = err
+          errorInfo.errorCode = '101'
+          errorInfo.message = '未找到对应的 gist,是否重新创建?'
+          return void 0
+        })
       }).catch(() => {
         return false
       })

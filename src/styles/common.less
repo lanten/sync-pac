@@ -2,6 +2,7 @@
 html,
 body {
   background-color: transparent !important;
+  height: 100%;
 }
 
 #root {
@@ -50,10 +51,10 @@ body {
 
 .text {
   each(@colors, {
-    &-@{key} {
-      color: @value;
+      &-@{key} {
+        color: @value;
+      }
     }
-  }
   );
 }
 
@@ -66,7 +67,7 @@ body {
   padding: 0 @p;
   button {
     margin-right: @p/2;
-    &:last-child{
+    &:last-child {
       margin-right: 0;
     }
   }
