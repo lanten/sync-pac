@@ -100,33 +100,45 @@ function getGistData(autoCreate) {
     let gistData, errorInfo = {}
     if (gistId) {
       console.log(gistId)
-      gistData = await getGistDataByGistId(gistId).catch(() => undefined)
+      gistData = await getGistDataByGistId(gistId).catch((err) => {
+        errorInfo = err
+        errorInfo.errorCode = '101'
+        errorInfo.message = '未找到对应的 gist,是否重新创建?'
+        return void 0
+      })
     } else {
       gistData = await getGistList().then((res = {}) => {
         if (res.message) {
-          message.error(res.message)
+          errorInfo = err
         }
         return res.find(v => v.description === gistDescription)
-      }).catch(() => false)
+      }).catch(() => {
+        return false
+      })
 
       if (!gistData) {
-        if (autoCreate) {
-          console.log('自动创建 gist')
-          gistData = await createGist().catch(() => undefined)
-        } else {
-          console.log('error')
-          errorInfo.errorCode = '101'
-          errorInfo.message = '未找到对应的 gist,是否自动创建?'
-        }
+        errorInfo.errorCode = '101'
+        errorInfo.message = '未找到对应的 gist,是否自动创建?'
       }
     }
+
+    if (!gistData) {
+      if (autoCreate) {
+        console.log('自动创建 gist')
+        gistData = await createGist().catch(() => {
+          errorInfo = err
+          return void 0
+        })
+      }
+    }
+
     if (gistData) {
       if (!gistId) {
         global.$api.setConfig({ gistId: gistData.id })
       }
       resolve(gistData)
     } else {
-      reject(Object.assign(errorInfo, { gistData }))
+      reject(errorInfo)
     }
   })
 }
@@ -137,6 +149,23 @@ function getGistData(autoCreate) {
  */
 function uploadToGists(pacData) {
   console.log('upload ready', pacData)
+  let { gistId } = global.$api.getConfig()
+
+  const sandData = {
+    files: {
+      'config.json': {
+        content: JSON.stringify({
+          version: '1.0',
+          createTime: Date.now(),
+        })
+      },
+      'user-rule.txt': {
+        content: pacData,
+      }
+    },
+    description: gistDescription,
+  }
+  return request(`/gists/${gistId}`, sandData, { method: 'POST' })
 }
 
 module.exports = {

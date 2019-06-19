@@ -2,8 +2,6 @@
   <img src="./assets/app-icon/app-icon@256.png"/>
 </div>
 
-> 完成度 0.1%
-
 ## 这是什么玩意儿？
 
 基于 electron 实现的 shadowsocks 用户PAC规则管理工具

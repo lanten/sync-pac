@@ -1,11 +1,12 @@
 import React from 'react'
+import { clipboard } from 'electron'
 
 import {
-  message, Button, Icon,
+  message, Button, Icon, Modal,
   Checkbox, Popconfirm, Popover,
 } from 'antd'
 
-import { SideMenu } from '../../components'
+// import { SideMenu } from '../../components'
 import PacModal from './components/PacModal'
 import './pac.less'
 
@@ -27,6 +28,8 @@ export default class pac extends React.Component {
         }
       ],
     }
+
+    this.config = $api.getConfig()
 
     this.pacModalRef = React.createRef()
   }
@@ -73,7 +76,7 @@ export default class pac extends React.Component {
               this.setState({ pacList: this.state.pacList })
             }}></Button>
             <Button shape="circle" size="small" icon="edit" onClick={() => this.modifyPacItem(...arguments)}></Button>
-            <Popconfirm title="确定删除本条规则吗?" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)}>
+            <Popconfirm title="确定删除本条规则吗? (删除操作不会自动同步)" placement="topRight" arrowPointAtCenter onConfirm={() => this.deletePacItem(...arguments)}>
               <Button shape="circle" size="small" icon="delete" type="danger" ghost></Button>
             </Popconfirm>
           </div>
@@ -108,7 +111,10 @@ export default class pac extends React.Component {
 
   // 
   render() {
-    const { pacList = [], sideMenus, modifyData, loadingGist = false } = this.state
+    const {
+      pacList = [], sideMenus, modifyData,
+      downloadingGist = false, uploadingGist = false,
+    } = this.state
 
     return (
       <div className="flex-1 flex row page-pac">
@@ -121,20 +127,27 @@ export default class pac extends React.Component {
           <div className="flex row action-bar">
             <Button size="small" icon="plus" onClick={() => this.addPacItem()}></Button>
             <span className="flex-1"></span>
-            <Popover placement="bottomRight" title="分享 GistId 给你的小伙伴" onConfirm={this.downloadPacData}>
+            <Popover placement="bottomRight" title="分享 GistId 给你的小伙伴" content={
+              this.config.gistId
+                ? <div>
+                  <span style={{ marginRight: '14px' }}>{this.config.gistId}</span>
+                  <Button size="small" icon="copy" onClick={() => {
+                    clipboard.writeText(this.config.gistId, 'selection')
+                    message.success('已复制到剪辑板')
+                  }}></Button>
+                </div>
+                : <p className="text-gray">没有 gistId</p>
+            }>
               <Button size="small" icon="share-alt"></Button>
             </Popover>
 
-            <Popconfirm placement="bottomRight" title="下载,此操作将会覆盖本地数据" onConfirm={this.downloadPacData} icon={<Icon type="cloud-download" />}>
-              <Button size="small" icon="cloud-download"></Button>
+            <Popconfirm placement="bottomRight" title="下载,此操作将会覆盖本地数据" onConfirm={() => this.downloadPacData()} icon={<Icon type="cloud-download" />}>
+              <Button size="small" icon="cloud-download" loading={downloadingGist}></Button>
             </Popconfirm>
 
-            <Popconfirm placement="bottomRight" title="上传,此操作将会覆盖云端数据" onConfirm={this.uploadPacData} icon={<Icon type="cloud-upload" />}>
-              <Button size="small" icon="cloud-upload"></Button>
+            <Popconfirm placement="bottomRight" title="上传,此操作将会覆盖云端数据" onConfirm={() => this.uploadPacData()} icon={<Icon type="cloud-upload" />}>
+              <Button size="small" icon="cloud-upload" loading={uploadingGist}></Button>
             </Popconfirm>
-
-            <Button size="small" icon="cloud-sync" loading={loadingGist}></Button>
-            {/* <Icon type="plus-circle" theme="twoTone" style={{ fontSize: 24 }}></Icon> */}
           </div>
           <div className="flex-1 container padding scroll-y pac-list">
             {pacList.map(this.renderPacListRow.bind(this))}
@@ -155,7 +168,6 @@ export default class pac extends React.Component {
 
   // 修改规则
   modifyPacItem(data, rowIndex, groupIndex) {
-    console.log(data, rowIndex, groupIndex)
     this.setState({ modifyData: Object.assign(data, { rowIndex, groupIndex }) }, () => {
       this.pacModalRef.current.show()
     })
@@ -172,16 +184,24 @@ export default class pac extends React.Component {
       pacList.splice(rowIndex, 1)
     }
 
-    $api.setPacList(pacList).then(() => this.setState({ pacList }))
+    this.refreshPacList(pacList)
   }
 
-  //  新增/修改 回调
+  // 刷新本地 PAC 数据
+  refreshPacList(pacList) {
+    return $api.setPacList(pacList).then(() => this.setState({ pacList }))
+  }
+
+  /**
+   * 新增/修改 回调
+   * @param {String} type [添加:add,修改:modify,添加并同步:add-sync,修改并同步:modify-sync,]
+   */
   modalConfirm = (type, newData) => {
     const { pacList } = this.state
 
-    if (type === 'add') {
+    if (['add', 'add-sync'].includes(type)) {
       pacList.unshift(newData)
-    } else if (type === 'modify') {
+    } else if (['modify', 'modify-sync'].includes(type)) {
       const { rowIndex, groupIndex } = newData
       if (typeof groupIndex === 'number') {
         pacList[groupIndex].list[rowIndex] = newData
@@ -190,11 +210,11 @@ export default class pac extends React.Component {
       }
     }
 
-
-    $api.setPacList(pacList).then(() => {
-      this.setState({ pacList }, () => {
-        this.pacModalRef.current.hide()
-      })
+    this.refreshPacList(pacList).then(() => {
+      this.pacModalRef.current.hide()
+      if (['add-sync', 'modify-sync'].includes(type)) {
+        this.uploadPacData()
+      }
     })
   }
 
@@ -215,23 +235,54 @@ export default class pac extends React.Component {
         return { host: host, active: newValue === 'all' ? true : newValue.includes(host) }
       })
     }
-    $api.setPacList(pacList).then(() => this.setState({ pacList }))
+    this.refreshPacList(pacList)
   }
 
   // 下载云端数据
-  downloadPacData = () => {
-    this.setState({ loadingGist: true })
-    $api.getGistData().then(res => {
-      console.log(res)
+  downloadPacData(autoCreate = false) {
+    this.setState({ downloadingGist: true })
+    $api.getGistData(autoCreate).then(res => {
+      const pacDataCloud = res.files['user-rule.txt']
+      if (!pacDataCloud) return message.warn('暂无云端数据,请先上传!')
+      const pacList = $api.parsePacList(pacDataCloud.content)
+      if (pacList.length) {
+        this.refreshPacList(pacList)
+
+      } else {
+        Modal.confirm({
+          title: '提示',
+          content: '云端列表为空,是否继续?',
+          onOk: () => {
+            this.refreshPacList(pacList)
+          }
+        })
+      }
+    }).catch(err => {
+      console.log(err)
+      if (err.errorCode === '101') {
+        Modal.confirm({
+          title: '提示',
+          content: err.message,
+          onOk: () => {
+            this.downloadPacData(true)
+          }
+        })
+      } else {
+        message.error(err.message)
+      }
     }).finally(() => {
-      this.setState({ loadingGist: false })
+      this.setState({ downloadingGist: false })
     })
   }
 
   // 上传到云端
-  uploadPacData = async () => {
+  async uploadPacData() {
+    this.setState({ uploadingGist: true })
     const pacSource = await $api.getPacSource()
-    $api.uploadToGists(pacSource)
+    return $api.uploadToGists(pacSource).then(res => {
+      message.success('上传成功')
+      this.setState({ uploadingGist: false })
+    })
   }
 
 } // class pac end

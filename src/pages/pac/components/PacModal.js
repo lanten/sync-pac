@@ -95,9 +95,10 @@ export default class Main extends React.Component {
 
     if (!domain) return message.error('请输入域名')
 
+    console.log({ hostsValue: this.hostsValue })
     const hosts = this.hostsValue.map(val => {
       const newVal = { active: true, host: val }
-      if (type === 'add') return newVal
+      if (['add', 'add-sync'].includes(type)) return newVal
       const defaultIndex = hostsDefault.findIndex(v => v.host === val)
       return defaultIndex > -1 ? hostsDefault[defaultIndex] : newVal
     })
