@@ -1,4 +1,4 @@
-const fetch = require('node-fetch')
+// const fetch = require('unfetch')
 const { gistDescription } = require('../../config/app.config')
 
 const gistsApis = {
@@ -14,7 +14,7 @@ function request(url, params = {}, options = {}) {
     from = '' // 来源页
   } = options
 
-  const { token } = global.$api.getConfig()
+  const { token } = $api.getConfig()
 
   // const keys = key.split('/')
   // let url = gistsApis[keys.shift()]
@@ -38,7 +38,7 @@ function request(url, params = {}, options = {}) {
   if (token) {
     requestHead.headers.Authorization = `token ${token}`
   } else {
-    if (needAuth) global.$api.createWindow('setting', { from })
+    if (needAuth) $api.createWindow('setting', { from })
   }
 
   return fetch(`${baseURL}${url}`, requestHead).then(async res => {
@@ -56,7 +56,7 @@ function request(url, params = {}, options = {}) {
 
 // 获取 gist
 function getGistDataByGistId(gistId) {
-  if (!gistId) gistId = global.$api.getConfig().gistId
+  if (!gistId) gistId = $api.getConfig().gistId
 
   return request('/gists/' + gistId)
 }
@@ -83,7 +83,7 @@ function createGist(sendData) {
   return request('/gists', Object.assign(DEFAULT_SAND_DATA, sendData), { method: 'POST' }).then(res => {
     if (res.id) {
       console.warn('重置 gistId', res.id)
-      global.$api.setConfig({ gistId: res.id })
+      $api.setConfig({ gistId: res.id })
     }
     return res
   })
@@ -95,7 +95,7 @@ function createGist(sendData) {
  */
 function getGistData(autoCreate) {
   return new Promise(async (resolve, reject) => {
-    let { gistId } = global.$api.getConfig()
+    let { gistId } = $api.getConfig()
     let gistData, errorInfo = {}
     if (gistId) {
       console.log(gistId)
@@ -140,7 +140,7 @@ function getGistData(autoCreate) {
 
     if (gistData) {
       if (!gistId) {
-        global.$api.setConfig({ gistId: gistData.id })
+        $api.setConfig({ gistId: gistData.id })
       }
       resolve(gistData)
     } else {
@@ -155,7 +155,7 @@ function getGistData(autoCreate) {
  */
 function uploadToGists(pacData) {
   console.log('upload ready', pacData)
-  let { gistId } = global.$api.getConfig()
+  let { gistId } = $api.getConfig()
 
   const sandData = {
     files: {
