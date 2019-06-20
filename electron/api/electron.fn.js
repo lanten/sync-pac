@@ -145,7 +145,7 @@ function setPacList(pacList) {
 function parsePacList(data, hasGroup = true) {
   const REG_RULE = /(!\s*)?\|\|(.*\.)?(.+)(\..+)\^/g
   const REG_GROUP = /!\s*##\s*\[(.+)-start\]([\s\S]*)!\s*##\s*\[(.+)-end\]/g
-  const REG_MEMO = /!#\smemo-(.+):\s?(.*)/
+  const REG_MEMO = /!#\smemo-(.+):\s?(.*)/g
   const arr = []
 
   let str = hasGroup ? data.replace(REG_GROUP, (res, $1 = '', $2 = '', $3 = '') => {
