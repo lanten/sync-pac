@@ -11,7 +11,7 @@
 ## 平台支持
 
 - windows 7
-- mac os 10.8
+- mac os 10.8 [release-v0.0.1-beta](https://github.com/lanten/sync-pac/releases/tag/0.0.1-beta)
 
 ## Quick start
 
