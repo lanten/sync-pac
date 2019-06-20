@@ -145,6 +145,7 @@ function setPacList(pacList) {
 function parsePacList(data, hasGroup = true) {
   const REG_RULE = /(!\s*)?\|\|(.*\.)?(.+)(\..+)\^/g
   const REG_GROUP = /!\s*##\s*\[(.+)-start\]([\s\S]*)!\s*##\s*\[(.+)-end\]/g
+  const REG_MEMO = /!#\smemo-(.+):\s?(.*)/
   const arr = []
 
   let str = hasGroup ? data.replace(REG_GROUP, (res, $1 = '', $2 = '', $3 = '') => {
@@ -177,6 +178,13 @@ function parsePacList(data, hasGroup = true) {
     }
   })
 
+  // 获取备注
+  str.replace(REG_MEMO, (_, domain, memo) => {
+    if (obj.hasOwnProperty(domain)) {
+      arr[obj[domain]].memo = memo
+    }
+  })
+
   return arr
 }
 
@@ -206,12 +214,14 @@ function parsePacListToString(listData) {
  * 将单个 pac 规则转换成字符串
  * @param {Object} pacData 
  */
-function parsePacItemToString({ domain, hosts }) {
+function parsePacItemToString(pacData) {
+  const { domain, hosts, memo } = pacData
+
   let resStr = ''
   hosts.forEach(({ host, active }) => {
     resStr += `${active ? ' ' : '! '}||${host === '@' ? '' : host + '.'}${domain}^${BREAK}`
   })
-  return resStr
+  return `!# memo-${domain}: ${memo || ''}\n${resStr}\n`
 }
 
 const $api = {

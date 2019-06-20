@@ -6,6 +6,8 @@
 
 基于 electron 实现的 shadowsocks 用户PAC规则管理工具
 
+![gui](/static/image/gui.png)
+
 ## 平台支持
 
 - windows 7

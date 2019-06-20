@@ -28,7 +28,7 @@ export default class Main extends React.Component {
   render() {
     const { modalVisible } = this.state
     const { modifyData = {} } = this.props
-    const { domain, hosts } = modifyData
+    const { domain, hosts, memo } = modifyData
 
     return (
       <Modal
@@ -66,7 +66,7 @@ export default class Main extends React.Component {
           <Form.Item label="描述" {...formItemProps}
             help="规则的注释,如: 谷歌首页"
           >
-            <Input ref={this.memoRef} placeholder="随便什么描述 (可空)" />
+            <Input ref={this.memoRef} placeholder="随便什么描述 (可空)" defaultValue={memo} />
           </Form.Item>
         </Form>
       </Modal>
@@ -94,8 +94,8 @@ export default class Main extends React.Component {
     const memo = this.memoRef.current.input.value
 
     if (!domain) return message.error('请输入域名')
+    if (!/^.+\..+$/.test(domain)) return message.error('您输入的域名好像有点不对劲')
 
-    console.log({ hostsValue: this.hostsValue })
     const hosts = this.hostsValue.map(val => {
       const newVal = { active: true, host: val }
       if (['add', 'add-sync'].includes(type)) return newVal

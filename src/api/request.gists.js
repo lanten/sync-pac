@@ -112,7 +112,7 @@ function getGistData(autoCreate) {
         }
         const pacGist = res.find(v => v.description === gistDescription)
         if (!pacGist || !pacGist.id) return void 0
-        return getGistDataByGistId(gistId).catch((err) => {
+        return getGistDataByGistId(pacGist.id).catch((err) => {
           errorInfo.err = err
           errorInfo.errorCode = '101'
           errorInfo.message = '未找到对应的 gist,是否重新创建?'
@@ -154,9 +154,7 @@ function getGistData(autoCreate) {
  * @param {*} pacData 
  */
 function uploadToGists(pacData) {
-  console.log('upload ready', pacData)
   let { gistId } = $api.getConfig()
-
   const sandData = {
     files: {
       'config.json': {
@@ -171,7 +169,11 @@ function uploadToGists(pacData) {
     },
     description: gistDescription,
   }
-  return request(`/gists/${gistId}`, sandData, { method: 'POST' })
+  if (gistId) {
+    return request(`/gists/${gistId}`, sandData, { method: 'POST' })
+  } else {
+    return createGist(sandData)
+  }
 }
 
 module.exports = {

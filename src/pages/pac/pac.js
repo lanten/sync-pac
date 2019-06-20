@@ -35,18 +35,22 @@ export default class pac extends React.Component {
   }
 
   componentDidMount() {
-    // this.downloadPacData()
+    this.getLocalPacData()
+  }
 
+  getLocalPacData() {
+    this.setState({ localLoading: true })
     $api.getPacList().then(pacList => {
+      console.log(pacList)
       this.setState({ pacList })
     }).catch(err => {
       message.error('读取PAC文件出错,请查看处理日志!')
       console.error(err)
-    })
+    }).finally(() => this.setState({ localLoading: false }))
   }
 
   // 渲染 pac 元素
-  renderPacListItem({ domain, hosts, showDetail }, rowIndex, groupIndex) {
+  renderPacListItem({ domain, hosts, showDetail, memo }, rowIndex, groupIndex) {
     const checkBoxOptions = []
     const checkBoxValues = []
     hosts.forEach(({ active, host }) => {
@@ -61,9 +65,12 @@ export default class pac extends React.Component {
           <Checkbox className="flex-1" checked={allChecked} indeterminate={indeterminate} onChange={({ target: { checked } }) => {
             this.setPacHosts(checked ? 'all' : [], rowIndex, groupIndex)
           }}>
-            <h3 className="text-gray item-title">
-              {domain}
-            </h3>
+            <div className="flex center-v">
+              <h3 className="text-gray item-title">
+                {domain}
+              </h3>
+              {memo && <span>&nbsp; <Icon type="tag" theme="filled" className="fs-10 text-green" />&nbsp;{memo}</span>}
+            </div>
           </Checkbox>
 
           <div className="flex row actions">
@@ -113,7 +120,7 @@ export default class pac extends React.Component {
   render() {
     const {
       pacList = [], sideMenus, modifyData,
-      downloadingGist = false, uploadingGist = false,
+      downloadingGist = false, uploadingGist = false, localLoading = false
     } = this.state
 
     return (
@@ -125,7 +132,10 @@ export default class pac extends React.Component {
 
         <div className="flex-1 flex column">
           <div className="flex row action-bar">
-            <Button size="small" icon="plus" onClick={() => this.addPacItem()}></Button>
+            <Popover placement="bottomRight" content="新建">
+              <Button size="small" icon="plus" onClick={() => this.addPacItem()}></Button>
+            </Popover>
+
             <span className="flex-1"></span>
             <Popover placement="bottomRight" title="分享 GistId 给你的小伙伴" content={
               this.config.gistId
@@ -141,13 +151,22 @@ export default class pac extends React.Component {
               <Button size="small" icon="share-alt"></Button>
             </Popover>
 
-            <Popconfirm placement="bottomRight" title="下载,此操作将会覆盖本地数据" onConfirm={() => this.downloadPacData()} icon={<Icon type="cloud-download" />}>
-              <Button size="small" icon="cloud-download" loading={downloadingGist}></Button>
-            </Popconfirm>
+            <Popover placement="bottomRight" content="刷新本地数据">
+              <Button size="small" icon="sync" loading={localLoading} onClick={() => this.getLocalPacData()}></Button>
+            </Popover>
 
-            <Popconfirm placement="bottomRight" title="上传,此操作将会覆盖云端数据" onConfirm={() => this.uploadPacData()} icon={<Icon type="cloud-upload" />}>
-              <Button size="small" icon="cloud-upload" loading={uploadingGist}></Button>
-            </Popconfirm>
+            <Popover placement="bottomRight" content="下载">
+              <Popconfirm placement="bottomRight" title="下载,此操作将会覆盖本地数据" onConfirm={() => this.downloadPacData()} icon={<Icon type="cloud-download" />}>
+                <Button size="small" icon="cloud-download" loading={downloadingGist}></Button>
+              </Popconfirm>
+            </Popover>
+
+            <Popover placement="bottomRight" content="上传">
+              <Popconfirm placement="bottomRight" title="上传,此操作将会覆盖云端数据" onConfirm={() => this.uploadPacData()} icon={<Icon type="cloud-upload" />}>
+                <Button size="small" icon="cloud-upload" loading={uploadingGist}></Button>
+              </Popconfirm>
+            </Popover>
+
           </div>
           <div className="flex-1 container padding scroll-y pac-list">
             {pacList.map(this.renderPacListRow.bind(this))}
@@ -184,17 +203,17 @@ export default class pac extends React.Component {
       pacList.splice(rowIndex, 1)
     }
 
-    this.refreshPacList(pacList)
+    this.savePacList(pacList)
   }
 
-  // 刷新本地 PAC 数据
-  refreshPacList(pacList) {
-    return $api.setPacList(pacList).then(() => this.setState({ pacList }))
+  // 保存本地 PAC 数据
+  savePacList(pacList) {
+    return $api.setPacList(JSON.parse(JSON.stringify(pacList))).then(() => this.setState({ pacList }))
   }
 
   /**
    * 新增/修改 回调
-   * @param {String} type [添加:add,修改:modify,添加并同步:add-sync,修改并同步:modify-sync,]
+   * @param {String} type [添加:add,修改:modify,添加并同步:add-sync,修改并同步:modify-sync]
    */
   modalConfirm = (type, newData) => {
     const { pacList } = this.state
@@ -210,7 +229,7 @@ export default class pac extends React.Component {
       }
     }
 
-    this.refreshPacList(pacList).then(() => {
+    this.savePacList(pacList).then(() => {
       this.pacModalRef.current.hide()
       if (['add-sync', 'modify-sync'].includes(type)) {
         this.uploadPacData()
@@ -235,7 +254,7 @@ export default class pac extends React.Component {
         return { host: host, active: newValue === 'all' ? true : newValue.includes(host) }
       })
     }
-    this.refreshPacList(pacList)
+    this.savePacList(pacList)
   }
 
   // 下载云端数据
@@ -246,14 +265,14 @@ export default class pac extends React.Component {
       if (!pacDataCloud) return message.warn('暂无云端数据,请先上传!')
       const pacList = $api.parsePacList(pacDataCloud.content)
       if (pacList.length) {
-        this.refreshPacList(pacList)
+        this.savePacList(pacList)
 
       } else {
         Modal.confirm({
           title: '提示',
           content: '云端列表为空,是否继续?',
           onOk: () => {
-            this.refreshPacList(pacList)
+            this.savePacList(pacList)
           }
         })
       }
@@ -281,8 +300,9 @@ export default class pac extends React.Component {
     const pacSource = await $api.getPacSource()
     return $api.uploadToGists(pacSource).then(res => {
       message.success('上传成功')
-      this.setState({ uploadingGist: false })
-    })
+    }).catch(err => {
+      message.error(err.message)
+    }).finally(() => this.setState({ uploadingGist: false }))
   }
 
 } // class pac end
